@@ -33,16 +33,21 @@ public class Card {
      * 
      * @param a card
      */
-    public void reverse (Card a) {
+    public Card reverse (Card a) {
+
+        Card tmp = new Card (a.value, a.naipe); 
+
         if (a.value == 58) {
-            a.value = 84;
+            tmp.value = 84;
         } else if (a.value == 59) {
-            a.value = 74;
+            tmp.value = 74;
         } else if (a.value == 60) {
-            a.value = 81;
+            tmp.value = 81;
         } else if (a.value == 61) {
-            a.value = 75;
+            tmp.value = 75;
         }
+        
+        return tmp;
     }
 
     public String toString() {

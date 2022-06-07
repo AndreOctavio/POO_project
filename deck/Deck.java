@@ -6,13 +6,19 @@ import java.util.List;
 public class Deck {
 
     public  List <Card> deck;
-    int[] excluded;
+    public int[] excluded;
 
+    /**
+     * Constructs the Deck. 
+     */
     public Deck() {
-        int[] excluded = {0, 0, 0, 0, 0};
         deck = new ArrayList<Card> ();
+        excluded = new int [5];
     }
 
+    /**
+     * Creates all the cards for the deck. 
+     */
     public void createDeck () {
         char[] naipes = {'S', 'C', 'H', 'D'};
         int i = 0;
@@ -24,7 +30,5 @@ public class Deck {
             }
             i++;
         }
-        
-        System.out.println (deck);
     }
 }
