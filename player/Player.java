@@ -6,7 +6,7 @@ import java.util.List;
 
 public class Player {
     
-    int money;
+    public int money;
     public List<Card> hand; 
 
     /**
