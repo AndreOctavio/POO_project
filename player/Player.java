@@ -54,4 +54,5 @@ public class Player {
     public void loss (int q) {
         money -= q;
     }
+
 }
