@@ -1,15 +1,27 @@
 package game;
 
 import deck.Card;
-import java.util.ArrayList;
+import player.Player;
+import java.util.List;
 
-public interface Game {
-    
-    public void Commands(String c);
-    public void deal();
-    public void bet(int m);
-    public void credit();
-    public String advice (ArrayList<Card> h);
-    public String statistics ();
+abstract class Game {
+
+    public Player player;
+
+    public Game (int m){
+        player = new Player(m);
+    }
+
+    public void deal(List<Card> hand) 
+    {}
+    public void bet(int m){};
+    public void credit() {
+        System.out.println("-cmd $\nplayer's credit is"+player.money+"\n");
+    }
+    public List<Integer> advice (List<Card> h) {
+    }
+    public void statistics () {};
+    public void doHold (List <Integer> h) {
+    }
 
 }
