@@ -23,12 +23,11 @@ public class Main {
                 return;
             }
 
-            if ((args[2] != "cmd-file") && (args[3] != "card-file")) {
+            if (!(args[2].equals("cmd-file")) || !(args[3].equals("card-file"))) {
 
                 System.out.println("error: wrong file name");
 
             } else {
-
                 int credit = Integer.parseInt(args[1]);
 
                 try {
@@ -55,7 +54,14 @@ public class Main {
                     e.printStackTrace();
                 }
 
-                DebugMode dm = new DebugMode(credit, commands_input, cards_input);
+                /*delete prints*/
+                System.out.println(commands_input);
+
+                DebugMode dm = new DebugMode(credit);
+
+                System.out.println(dm.player.money);
+
+                dm.Commands(commands_input);
             }
 
         } else if (args[0].equals("-s")) { // SIMULATION MODE
@@ -69,7 +75,7 @@ public class Main {
                 int bet = Integer.parseInt(args[2]);
                 int nbdeals = Integer.parseInt(args[3]);
 
-                SimulationMode sm = new SimulationMode(credit, bet, nbdeals);
+                //SimulationMode sm = new SimulationMode(credit, bet, nbdeals);
 
             } catch (Exception e) {
                 System.out.println("error in the parameters");

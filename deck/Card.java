@@ -34,6 +34,7 @@ public class Card {
      * Reverses changes made to card a in the constructor. 
      * 
      * @param a card
+     * @return normal card
      */
     public Card reverse (Card a) {
 

@@ -6,29 +6,45 @@ import java.util.List;
 
  public class DebugMode extends Game{
 
+    /**
+     * Constructs DebugMode, player with money m. 
+     * 
+     * @param m money
+     */
     public DebugMode (int m) {
         super(m);
     }
 
+
+    /**
+     * Creates a String array with all the commands from cmd-file and 
+     * calls the methods necessary to execute them.
+     * 
+     * if deal = 1, player made deal so command bet is invalid, so is deal again;
+     * if deal = 0, player made bet so command advice, bet and hold are invalid;
+     * if deal = -1, player made hold so command advice, hold and deal are invalid;
+     * 
+     * @param c String with all the commands from cmd-file
+     */
     public void Commands(String c) {
-        
-        String [] commandsArray = c.split (" ");
-        List<Integer> hold = new ArrayList<Integer>();
-        int i = 0, n, bet = 0, p_bet = 5,deal = -1;
+
+        String [] commandsArray = c.split (" "); //commandsArray has all the strings from cmd-file
+        List<Integer> hold = new ArrayList<Integer>(); //hold is used to know which cards to keep
+        int i = 0, n, bet = 0, p_bet = 5,deal = -1; 
 
         while (i < commandsArray.length) {
-            if (commandsArray [i] == "b") {
+            if (commandsArray [i].equals("b")) { //command bet
                 try {
-                    bet = Integer.parseInt(commandsArray [i + 1]);
+                    bet = Integer.parseInt(commandsArray [i + 1]); //convert the string next to b into an int
                 }
-                catch (NumberFormatException e) {
+                catch (NumberFormatException e) {   //if it can't do it, then it's another command, bet amout is equal to last bet (5 if first bet)
                     bet = p_bet;
                     i--;
                 }
 
-                if (deal == 1) {
+                if (deal != -1) {  //check if bet command is llegal
                     System.out.println("\nb: illegal command");
-                } else if (bet < 0 || bet > 5) {
+                } else if (bet < 0 || bet > 5) { //check if bet amout is between [1,5]
                     System.out.print("\n-cmd b " + commandsArray[i + 1]+ "\nb: illegal amount");
                 } else {
                     deal = 0;
@@ -36,56 +52,56 @@ import java.util.List;
                     bet(bet);
                 }
                 i+=2;
-            } else if (commandsArray [i] == "$") {
+            } else if (commandsArray [i].equals("$")) { //command credit
                 credit();
                 i++;
-            } else if (commandsArray [i] == "d"){
-                if (deal != 0) {
-                    System.out.print("\n-cmd d\nd: illegal command");
-                } else {
+            } else if (commandsArray [i].equals("d")){ //command deal
+                if (deal == 0) { //check if deal is llegal
                     deal = 1;
-                    deal(player.hand);
+                    deal();
                     System.out.print("\n-cmd d\nplayer's hand ");
-                    for (Card tmp:player.hand) {
+                    for (Card tmp:player.hand) { //print player's hand
                         System.out.print(tmp.reverse(tmp)+" ");
                     }
+                } else {
+                    System.out.print("\n-cmd d\nd: illegal command");
                 }
                 i++;
-            } else if (commandsArray [i] == "h") {
+            } else if (commandsArray [i].equals("h")) { //command hold
                     int tmp;
 
-                    for (n = 0; n < 5; n++) {
+                    for (n = 0; n < 5; n++) { //get the cards the player want's to hold
                         try {
                             tmp = Integer.parseInt(commandsArray [i + n]);
                         }
                         catch (NumberFormatException e) {
                             break;
                         }
-                        hold.add(tmp);
+                        hold.add(tmp); //add integer's to hold
                     }
 
-                    i+=hold.size();
+                    i+=hold.size() + 1;
 
                     System.out.print("\n-cmd h ");
 
-                    for (n = 0; n < hold.size(); n++) {
-                        System.out.print(hold.get(n)+" ");
+                    for (n = 0; n < hold.size(); n++) { //print the integers read next to h command
+                        System.out.print(hold.get(n)+" "); 
                     }
                     
-                    if (deal == 1) {
+                    if (deal == 1) { //check if command h is llegal
                         doHold(hold);
                         deal = -1;
                     } else {
                         System.out.print("\nh: illegal command");
                     }
                     hold.clear();
-            } else if (commandsArray [i] == "a"){
+            } else if (commandsArray [i].equals("a")){ //command advice
                 System.out.print("\n-cmd a");
-                if (deal == 1) {
+                if (deal == 1) { //check if command a is llegal
                     hold = advice(player.hand);
                     System.out.print("\nplayer should hold cards ");
 
-                    for (n = 0; n < hold.size(); n++) {
+                    for (n = 0; n < hold.size(); n++) { //print whick card's the player need's to hold
                         System.out.print(hold.get(n)+" ");
                     }
                 } else {
@@ -93,7 +109,7 @@ import java.util.List;
                 }
 
                 i++;
-            } else if (commandsArray [i] == "s") {
+            } else if (commandsArray [i].equals("s")) { //command statistics
                 System.out.print("\n-cmd s");
                 statistics();
             }

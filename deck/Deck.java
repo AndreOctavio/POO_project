@@ -6,14 +6,14 @@ import java.util.List;
 public class Deck {
 
     public  List <Card> deck;
-    public int[] excluded;
+    public List<Integer> excluded;
 
     /**
      * Constructs the Deck. 
      */
     public Deck() {
         deck = new ArrayList<Card> ();
-        excluded = new int [5];
+        excluded = new ArrayList<Integer>();
     }
 
     /**
@@ -30,5 +30,20 @@ public class Deck {
             }
             i++;
         }
+    }
+
+    /**
+     * Search for an int s in list n. 
+     * 
+     * @param n list of integers
+     * @param s integer we are looking for
+     */
+    public boolean search (List<Integer> n, int s) {
+        for (int i: n) {
+            if (i == s) {
+                return true;
+            }
+        }
+        return false;
     }
 }
