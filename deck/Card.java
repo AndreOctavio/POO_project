@@ -21,6 +21,8 @@ public class Card {
             value = 60;
         } else if (v == 75) {
             value = 61;
+        } else if (v == 65) {
+            value = 62;
         } else {
             value = v;
         }
@@ -45,6 +47,8 @@ public class Card {
             tmp.value = 81;
         } else if (a.value == 61) {
             tmp.value = 75;
+        } else if (a.value == 62) {
+            tmp.value = 65;
         }
         
         return tmp;
