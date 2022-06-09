@@ -15,9 +15,10 @@ public class Main {
         String cards_input = "";
 
         if (args[0].equals("-d")) { // DEBUG MODE
-
+            int credit;
+            
             try {
-                int credit = Integer.parseInt(args[1]); // verifies if the credit argument is an integer
+                credit = Integer.parseInt(args[1]); // verifies if the credit argument is an integer
             } catch (Exception e) {
                 System.out.println("error in the credit value");
                 return;

@@ -32,7 +32,7 @@ import java.util.List;
 
         String [] commandsArray = c.split (" "); //commandsArray has all the strings from cmd-file
         List<Integer> hold = new ArrayList<Integer>(); //hold is used to know which cards to keep
-        int i = 0, n, bet = 0, p_bet = 5,deal = -1; 
+        int i = 0, n, bet = 0, p_bet = 5,deal = -1, illegal = 0; 
 
         while (i < commandsArray.length) {
             if (commandsArray [i].equals("b")) { //command bet
@@ -82,6 +82,9 @@ import java.util.List;
                         catch (NumberFormatException e) {
                             break;
                         }
+                        if (tmp < 1 || tmp > 5) {
+                            illegal = 1;
+                        }
                         hold.add(tmp); //add integers to hold
                     }
 
@@ -93,11 +96,21 @@ import java.util.List;
                         System.out.print(hold.get(n)+" "); 
                     }
                     
-                    if (deal == 1) { //check if command h is llegal
+                    if (deal == 1 && illegal != 1) { //check if command h is llegal
                         doHold(hold);
+                        System.out.print("\nplayer's hand ");
+
+                        for (Card tmp2:player.hand) { //print player's hand
+                            System.out.print(tmp2.reverse(tmp2)+" ");
+                        }
+
                         deal = -1;
+                        strat();
+                        player.hand.clear();
+                        deckOfcards.excluded.clear();
                     } else {
                         System.out.println("\nh: illegal command");
+                        illegal = 0;
                     }
                     hold.clear();
             } else if (commandsArray [i].equals("a")){ //command advice
@@ -117,6 +130,9 @@ import java.util.List;
             } else if (commandsArray [i].equals("s")) { //command statistics
                 System.out.print("\n-cmd s");
                 statistics();
+            } else {
+                System.out.print("\n"+commandsArray[i]+": illegal command");
+                i++;
             }
         }
     }

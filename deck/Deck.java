@@ -2,6 +2,7 @@ package deck;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Deck {
 
@@ -47,6 +48,27 @@ public class Deck {
             deck.add(tmp);
             i++;
         }
+    }
+
+    /**
+     * Gets a random number from 0 to l limit and check's if it his in list n. 
+     * 
+     * @param n list of integers
+     * @param l limit
+     * 
+     * @return random number
+     */
+    public int getRandom (List<Integer> n, int l) {
+        Random rand = new Random();
+        int random;
+
+        random= rand.nextInt(l);
+
+        while (search(n, random) == true) {
+            random= rand.nextInt(l);
+        }
+
+        return random;
     }
 
     /**

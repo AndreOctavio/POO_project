@@ -6,7 +6,6 @@ import deck.Deck;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 abstract class Game {
 
@@ -34,39 +33,49 @@ abstract class Game {
     }
 
     /**
-     * Prints the player's credit.
+     * Prints the players credit.
      */
     public void credit() {
         System.out.println("\n-cmd $\nplayer's credit is "+player.money);
     }
 
     /**
-     * Gets 5 random cards from deckOfcards and gives them to player's hand. 
+     * Gets 5 random cards from deckOfcards and gives them to players hand. 
      */
     public void deal() {
-        Random rand = new Random();
         int random_num;
 
         for (int i = 0; i < 5; i++) {
-            random_num = rand.nextInt(52);
-            
-            while (deckOfcards.search(deckOfcards.excluded, random_num) != true) {
-                random_num = rand.nextInt(52);
-            }
-
+            random_num = deckOfcards.getRandom(deckOfcards.excluded, deckOfcards.deck.size());
             player.hand.add(deckOfcards.deck.get(random_num));
             deckOfcards.excluded.add(random_num);
         }
     }
 
+    /**
+     * Replaces the cards that the player doesn't want.
+     * 
+     * @param h list with the index of the cards that player wants in his hand. 
+     */
     public void doHold (List <Integer> h) {
-    }
-    
+        int random_num;
 
+        for (int n = 1; n < 6; n++) {
+            if (!deckOfcards.search(h, n)) { //check if n is in hold 
+                random_num = deckOfcards.getRandom(deckOfcards.excluded, deckOfcards.deck.size());
+                player.hand.set(n - 1, deckOfcards.deck.get(random_num)); //replace the new card in players hand
+                deckOfcards.excluded.add(random_num); //add index to the array with the already used cards from deck
+            }
+        }
+    }
     
     public List<Integer> advice (List<Card> h) {
         List<Integer> a = new ArrayList<Integer>();
         return a;
     }
+
+
     public void statistics () {};
+
+    public void strat () {}
 }
