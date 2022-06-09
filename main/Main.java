@@ -17,7 +17,7 @@ public class Main {
         if (args[0].equals("-d")) { // DEBUG MODE
 
             try {
-                Integer.parseInt(args[1]); // verifies if the credit argument is an integer
+                int credit = Integer.parseInt(args[1]); // verifies if the credit argument is an integer
             } catch (Exception e) {
                 System.out.println("error in the credit value");
                 return;
@@ -28,7 +28,6 @@ public class Main {
                 System.out.println("error: wrong file name");
 
             } else {
-                int credit = Integer.parseInt(args[1]);
 
                 try {
                     File cmd_file = new File(args[2] + ".txt");
@@ -67,13 +66,9 @@ public class Main {
         } else if (args[0].equals("-s")) { // SIMULATION MODE
 
             try {
-                Integer.parseInt(args[1]); // verifies if the credit argument is an integer
-                Integer.parseInt(args[2]); // verifies if the bet argument is an integer
-                Integer.parseInt(args[3]); // verifies if the nbdeals argument is an integer
-
-                int credit = Integer.parseInt(args[1]);
-                int bet = Integer.parseInt(args[2]);
-                int nbdeals = Integer.parseInt(args[3]);
+                int credit = Integer.parseInt(args[1]); // verifies if the credit argument is an integer
+                int bet = Integer.parseInt(args[2]); // verifies if the bet argument is an integer
+                int nbdeals = Integer.parseInt(args[3]); // verifies if the nbdeals argument is an integer
 
                 //SimulationMode sm = new SimulationMode(credit, bet, nbdeals);
 
