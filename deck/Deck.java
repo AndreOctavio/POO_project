@@ -33,6 +33,23 @@ public class Deck {
     }
 
     /**
+     * Gets deck from card-file. 
+     * 
+     * @param d card-file
+     */
+    public void getDeck (String d) {
+        String [] cardsArray = d.split (" ");
+        int i = 0;
+        Card tmp;
+
+        while (i < cardsArray.length) {
+            tmp = new Card(cardsArray[i].charAt(0), cardsArray[i].charAt(1));
+            deck.add(tmp);
+            i++;
+        }
+    }
+
+    /**
      * Search for an int s in list n. 
      * 
      * @param n list of integers

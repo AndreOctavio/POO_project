@@ -57,7 +57,7 @@ public class Main {
                 /*delete prints*/
                 System.out.println(commands_input);
 
-                DebugMode dm = new DebugMode(credit);
+                DebugMode dm = new DebugMode(credit, cards_input);
 
                 System.out.println(dm.player.money);
 

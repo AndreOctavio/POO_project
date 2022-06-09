@@ -1,7 +1,8 @@
 package deck;
 
 public class Card {
-    
+
+    /*Put verifications for card */
     char value;
     char naipe;
 

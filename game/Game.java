@@ -20,7 +20,8 @@ abstract class Game {
      */
     public Game (int m){
         player = new Player(m);
-        deckOfcards.createDeck();
+        deckOfcards = new Deck();   
+        /*deckOfcards.createDeck();     for simulation mode */
     }
 
     /**
@@ -33,14 +34,14 @@ abstract class Game {
     }
 
     /**
-     * Prints the playe's credit.
+     * Prints the player's credit.
      */
     public void credit() {
-        System.out.println("-cmd $\nplayer's credit is"+player.money+"\n");
+        System.out.println("\n-cmd $\nplayer's credit is "+player.money);
     }
 
     /**
-     * Gets 5 random card's from deckOfcards and gives them to player's hand. 
+     * Gets 5 random cards from deckOfcards and gives them to player's hand. 
      */
     public void deal() {
         Random rand = new Random();
