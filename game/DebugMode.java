@@ -131,7 +131,8 @@ import java.util.List;
                 System.out.print("\n-cmd s");
                 statistics();
             } else {
-                System.out.print("\nillegal command");
+                System.out.print("\n"+commandsArray[i]+": illegal command");
+                i++;
             }
         } 
     }
