@@ -117,7 +117,8 @@ import java.util.List;
             } else if (commandsArray [i].equals("s")) { //command statistics
                 System.out.print("\n-cmd s");
                 statistics();
-            }
-        }
+            } else {
+                System.out.print("\nillegal command");
+        } 
     }
 }
