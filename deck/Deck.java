@@ -7,14 +7,12 @@ import java.util.Random;
 public class Deck {
 
     public List<Card> deck;
-    public List<Integer> excluded;
 
     /**
      * Constructs the Deck.
      */
     public Deck() {
         deck = new ArrayList<Card>();
-        excluded = new ArrayList<Integer>();
     }
 
     /**

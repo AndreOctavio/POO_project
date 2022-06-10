@@ -11,7 +11,7 @@ abstract class Game {
 
     public Player player;
     public Deck deckOfcards;
-    protected int[] hands_count;
+    protected int[] hands_count = new int[11];
 
     /**
      * Constructs Game, player with money m.
@@ -21,7 +21,6 @@ abstract class Game {
     public Game(int m) {
         player = new Player(m);
         deckOfcards = new Deck();
-        int[] hands_count = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         /* deckOfcards.createDeck(); for simulation mode */
     }
 
@@ -32,7 +31,6 @@ abstract class Game {
      */
     public void bet(int m) {
         player.loss(m);
-        hands_count[0] = 0;
     }
 
     /**
@@ -43,41 +41,29 @@ abstract class Game {
     }
 
     /**
-     * Gets 5 random cards from deckOfcards and gives them to players hand.
+     * Gets 5 cards from deckOfcards and gives them to players hand.
      */
-    public void deal() {
-        int random_num;
-        hands_count[10]++;
-
-        for (int i = 0; i < 5; i++) {
-            random_num = deckOfcards.getRandom(deckOfcards.excluded, deckOfcards.deck.size());
-            player.hand.add(deckOfcards.deck.get(random_num));
-            deckOfcards.excluded.add(random_num);
-        }
-    }
+    public abstract void deal();
 
     /**
      * Replaces the cards that the player doesn't want.
      * 
      * @param h list with the index of the cards that player wants in his hand.
      */
-    public void doHold(List<Integer> h) {
-        int random_num;
-
-        for (int n = 1; n < 6; n++) {
-            if (!deckOfcards.search(h, n)) { // check if n is in hold
-                random_num = deckOfcards.getRandom(deckOfcards.excluded, deckOfcards.deck.size());
-                player.hand.set(n - 1, deckOfcards.deck.get(random_num)); // replace the new card in players hand
-                // deckOfcards.excluded.add(random_num); // NÃO É PRECISO!!!!!!!!!!!!
-            }
-        }
-    }
+    public abstract void doHold(List<Integer> h);
 
     public List<Integer> advice(List<Card> h) {
         List<Integer> a = new ArrayList<Integer>();
         return a;
     }
 
+    /**
+     * Identifies the type of hand that the player has and 
+     * gives the credit that he won, if he has a good hand.
+     * 
+     * @param h hand of the player.
+     * @param b amout of the bet.
+     */
     public int identifyHand(List<Card> h, int b) {
         h = player.organiseHand(h);
         boolean s = straight(h);
@@ -159,6 +145,12 @@ abstract class Game {
         }
     }
 
+    /**
+     * Checks if the if the h hand is a flush.
+     * 
+     * @param h hand of the player.
+     * @return true/false.
+     */
     public boolean flush(List<Card> h) {
 
         for (Card tmp : h) {
@@ -170,6 +162,12 @@ abstract class Game {
         return true;
     }
 
+    /**
+     * Checks if the if the h hand is a straight.
+     * 
+     * @param h hand of the player.
+     * @return true/false.
+     */
     public boolean straight(List<Card> h) {
         int cont = 1;
 
@@ -186,6 +184,11 @@ abstract class Game {
         return true;
     }
 
+    /**
+     * prints the statistics table.
+     * 
+     * @param N13 "theoretical returned"
+     */
     public void statistics(int N13) {
         System.out.println("Hand               Nb");
         System.out.println("______________________");

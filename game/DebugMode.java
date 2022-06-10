@@ -107,7 +107,6 @@ public class DebugMode extends Game {
                     deal = -1;
                     result(identifyHand(player.hand, bet));
                     player.hand.clear();
-                    deckOfcards.excluded.clear();
                 } else {
                     System.out.println("\nh: illegal command");
                     illegal = 0;
@@ -137,6 +136,47 @@ public class DebugMode extends Game {
         }
     }
 
+    /**
+     * Gets 5 cards from deckOfcards and gives them to players hand.
+     *
+     * It's a different method then the one in SimulationMode 
+     * because in this mode you dont need to shuffle.
+     */
+    public void deal () {
+        hands_count[10]++;
+
+        for (int i = 0; i < 5; i++) {
+            player.hand.add(deckOfcards.deck.get(0));
+            deckOfcards.deck.remove(0);
+        }
+
+    }
+
+    /**
+     * Replaces the cards that the player doesn't want.
+     * 
+     * It's a different method then the one in SimulationMode 
+     * because in this mode you dont take random cards from the deck.
+     * 
+     * @param h list with the index of the cards that player wants in his hand.
+     */
+    public void doHold(List<Integer> h) {
+        int i = 0;
+
+        for (int n = 1; n < 6; n++) {
+            if (!deckOfcards.search(h, n)) { // check if n is in hold
+                player.hand.set(n - 1, deckOfcards.deck.get(i)); // replace the new card in players hand
+                deckOfcards.deck.remove(i);
+                i++;
+            }
+        }
+    }
+
+    /**
+     * prints the final result of the play and the player's credit.
+     * 
+     * @param name_hand integer which identifies the hand of cards the player owns
+     */
     public void result(int name_hand) {
 
         switch (name_hand) {
