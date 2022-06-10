@@ -52,9 +52,9 @@ abstract class Game {
      */
     public abstract void doHold(List<Integer> h);
 
-    public List<Integer> advice(List<Card> h) {
-        List<Integer> a = new ArrayList<Integer>();
-        return a;
+    public List<Integer> advice(List<Card> hand) {
+        List<Integer> hold = new ArrayList<Integer>();
+        return hold;
     }
 
     /**
@@ -189,7 +189,7 @@ abstract class Game {
      * 
      * @param N13 "theoretical returned"
      */
-    public void statistics(int N13) {
+    public void statistics(double N13) {
         System.out.println("Hand               Nb");
         System.out.println("______________________");
         System.out.println("Jacks or Better      " + hands_count[0]);

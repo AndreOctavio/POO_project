@@ -32,16 +32,18 @@ public class DebugMode extends Game {
         String[] commandsArray = c.split(" "); // commandsArray has all the strings from cmd-file
         List<Integer> hold = new ArrayList<Integer>(); // hold is used to know which cards to keep
         int i = 0, n, bet = 0, p_bet = 5, deal = -1, illegal = 0;
-        int sum_of_all_gain = 0, sum_of_all_bets = 0;
+        double sum_of_all_bets = 0;
 
         while (i < commandsArray.length) {
             if (commandsArray[i].equals("b")) { // command bet
-                try {
-                    bet = Integer.parseInt(commandsArray[i + 1]); // convert the string next to b into an int
-                } catch (NumberFormatException e) { // if it can't do it, then it's another command, bet amout is equal
-                                                    // to last bet (5 if first bet)
-                    bet = p_bet;
-                    i--;
+                if (i + 1 != commandsArray.length) {
+                    try {
+                        bet = Integer.parseInt(commandsArray[i + 1]); // convert the string next to b into an int
+                    } catch (NumberFormatException e) { // if it can't do it, then it's another command, bet amout is equal
+                                                        // to last bet (5 if first bet)
+                        bet = p_bet;
+                        i--;
+                    }
                 }
 
                 System.out.print("\n-cmd b ");
@@ -69,6 +71,7 @@ public class DebugMode extends Game {
                     for (Card tmp : player.hand) { // print player's hand
                         System.out.print(tmp.reverse(tmp) + " ");
                     }
+                    System.out.print("\n");
                 } else {
                     System.out.print("\n-cmd d\nd: illegal command\n");
                 }
@@ -76,7 +79,10 @@ public class DebugMode extends Game {
             } else if (commandsArray[i].equals("h")) { // command hold
                 int tmp;
 
-                for (n = 0; n < 5; n++) { // get the cards the player wants to hold
+                for (n = 1; n < 6; n++) { // get the cards the player wants to hold
+                    if (i + n == commandsArray.length) {
+                        break;
+                    }
                     try {
                         tmp = Integer.parseInt(commandsArray[i + n]);
                     } catch (NumberFormatException e) {
@@ -103,7 +109,7 @@ public class DebugMode extends Game {
                     for (Card tmp2 : player.hand) { // print player's hand
                         System.out.print(tmp2.reverse(tmp2) + " ");
                     }
-
+            
                     deal = -1;
                     result(identifyHand(player.hand, bet));
                     player.hand.clear();
@@ -127,8 +133,9 @@ public class DebugMode extends Game {
 
                 i++;
             } else if (commandsArray[i].equals("s")) { // command statistics
-                System.out.print("\n-cmd s");
-                statistics((sum_of_all_gain / sum_of_all_bets) * 100);
+                System.out.println("\n-cmd s");
+                statistics((player.sum_of_all_gains/sum_of_all_bets) * 100);
+                i++;
             } else {
                 System.out.print("\n" + commandsArray[i] + ": illegal command");
                 i++;
@@ -161,13 +168,11 @@ public class DebugMode extends Game {
      * @param h list with the index of the cards that player wants in his hand.
      */
     public void doHold(List<Integer> h) {
-        int i = 0;
 
         for (int n = 1; n < 6; n++) {
             if (!deckOfcards.search(h, n)) { // check if n is in hold
-                player.hand.set(n - 1, deckOfcards.deck.get(i)); // replace the new card in players hand
-                deckOfcards.deck.remove(i);
-                i++;
+                player.hand.set(n - 1, deckOfcards.deck.get(0)); // replace the new card in players hand
+                deckOfcards.deck.remove(0);
             }
         }
     }
@@ -181,40 +186,40 @@ public class DebugMode extends Game {
 
         switch (name_hand) {
             case 0: // the player has no hand
-                System.out.println("player loses and his credit is " + player.money);
+                System.out.println("\nplayer loses and his credit is " + player.money);
                 break;
             case 11: // player has a ROYAL FLUSH
-                System.out.print("player wins with a ROYAL FLUSH and his credit is " + (player.money));
+                System.out.println("\nplayer wins with a ROYAL FLUSH and his credit is " + (player.money));
                 break;
             case 10: // player has a STRAIGHT FLUSH
-                System.out.print("player wins with a STRAIGHT FLUSH and his credit is " + (player.money));
+                System.out.println("\nplayer wins with a STRAIGHT FLUSH and his credit is " + (player.money));
                 break;
             case 9: // player has a FOUR ACES
-                System.out.print("player wins with a FOUR ACES and his credit is " + (player.money));
+                System.out.println("\nplayer wins with a FOUR ACES and his credit is " + (player.money));
                 break;
             case 8: // player has a FOUR 2-4
-                System.out.print("player wins with a FOUR 2-4 and his credit is " + (player.money));
+                System.out.println("\nplayer wins with a FOUR 2-4 and his credit is " + (player.money));
                 break;
             case 7: // player has a FOUR 5-K
-                System.out.print("player wins with a FOUR 5-K and his credit is " + (player.money));
+                System.out.println("\nplayer wins with a FOUR 5-K and his credit is " + (player.money));
                 break;
             case 6: // player has a FULL HOUSE
-                System.out.print("player wins with a FULL HOUSE and his credit is " + (player.money));
+                System.out.println("\nplayer wins with a FULL HOUSE and his credit is " + (player.money));
                 break;
             case 5: // player has a FLUSH
-                System.out.print("player wins with a FLUSH and his credit is " + (player.money));
+                System.out.println("\nplayer wins with a FLUSH and his credit is " + (player.money));
                 break;
             case 4: // player has a STRAIGHT
-                System.out.print("player wins with a STRAIGHT and his credit is " + (player.money));
+                System.out.println("\nplayer wins with a STRAIGHT and his credit is " + (player.money));
                 break;
             case 3: // player has a THREE OF A KIND
-                System.out.print("player wins with a THREE OF A KIND and his credit is " + (player.money));
+                System.out.println("\nplayer wins with a THREE OF A KIND and his credit is " + (player.money));
                 break;
             case 2: // player has a TWO PAIR
-                System.out.print("player wins with a TWO PAIR and his credit is " + (player.money));
+                System.out.println("\nplayer wins with a TWO PAIR and his credit is " + (player.money));
                 break;
             case 1: // player has a JACKS OR BETTER
-                System.out.print("player wins with a JACKS OR BETTER and his credit is " + (player.money));
+                System.out.println("\nplayer wins with a JACKS OR BETTER and his credit is " + (player.money));
                 break;
         }
 

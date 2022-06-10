@@ -9,7 +9,7 @@ public class Player {
 
     public int money;
     public List<Card> hand;
-    public int sum_of_all_gains;
+    public double sum_of_all_gains;
 
     /**
      * Constructs Player with money m and an empty array hand.
@@ -67,8 +67,9 @@ public class Player {
         for (Card tmp : h) {
             hand[n] = tmp.value;
             n++;
-        }
+        }   
 
+        n = 0;
         Arrays.sort(hand, 0, 4);
 
         while (n < 5) {
