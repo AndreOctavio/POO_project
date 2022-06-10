@@ -6,22 +6,22 @@ import java.util.Random;
 
 public class Deck {
 
-    public  List <Card> deck;
+    public List<Card> deck;
     public List<Integer> excluded;
 
     /**
-     * Constructs the Deck. 
+     * Constructs the Deck.
      */
     public Deck() {
-        deck = new ArrayList<Card> ();
+        deck = new ArrayList<Card>();
         excluded = new ArrayList<Integer>();
     }
 
     /**
-     * Creates all the cards for the deck. 
+     * Creates all the cards for the deck.
      */
-    public void createDeck () {
-        char[] naipes = {'S', 'C', 'H', 'D'};
+    public void createDeck() {
+        char[] naipes = { 'S', 'C', 'H', 'D' };
         int i = 0;
 
         while (i < 4) {
@@ -34,12 +34,12 @@ public class Deck {
     }
 
     /**
-     * Gets deck from card-file. 
+     * Gets deck from card-file.
      * 
      * @param d card-file
      */
-    public void getDeck (String d) {
-        String [] cardsArray = d.split (" ");
+    public void getDeck(String d) {
+        String[] cardsArray = d.split(" ");
         int i = 0;
         Card tmp;
 
@@ -51,34 +51,35 @@ public class Deck {
     }
 
     /**
-     * Gets a random number from 0 to l limit and check's if it his in list n. 
+     * Gets a random number from 0 to l limit and check's if it is in list n-> n
+     * list of integers
      * 
      * @param n list of integers
      * @param l limit
      * 
      * @return random number
      */
-    public int getRandom (List<Integer> n, int l) {
+    public int getRandom(List<Integer> n, int l) {
         Random rand = new Random();
         int random;
 
-        random= rand.nextInt(l);
+        random = rand.nextInt(l);
 
         while (search(n, random) == true) {
-            random= rand.nextInt(l);
+            random = rand.nextInt(l);
         }
 
         return random;
     }
 
     /**
-     * Search for an int s in list n. 
+     * Search for an int s in list n.
      * 
      * @param n list of integers
      * @param s integer we are looking for
      */
-    public boolean search (List<Integer> n, int s) {
-        for (int i: n) {
+    public boolean search(List<Integer> n, int s) {
+        for (int i : n) {
             if (i == s) {
                 return true;
             }

@@ -2,17 +2,17 @@ package deck;
 
 public class Card {
 
-    /*Put verifications for card */
-    char value;
-    char naipe;
+    /* Put verifications for card */
+    public char value;
+    public char naipe;
 
     /**
-     * Constructs a Card with value v and naipe n. 
+     * Constructs a Card with value v and naipe n.
      * 
      * @param v value
      * @param n naipe
      */
-    public Card(char v, char n){
+    public Card(char v, char n) {
 
         if (v == 84) {
             value = 58;
@@ -32,14 +32,14 @@ public class Card {
     }
 
     /**
-     * Reverses changes made to card a in the constructor. 
+     * Reverses changes made to card a in the constructor.
      * 
      * @param a card
      * @return normal card
      */
-    public Card reverse (Card a) {
+    public Card reverse(Card a) {
 
-        Card tmp = new Card (a.value, a.naipe); 
+        Card tmp = new Card(a.value, a.naipe);
 
         if (a.value == 58) {
             tmp.value = 84;
@@ -52,7 +52,7 @@ public class Card {
         } else if (a.value == 62) {
             tmp.value = 65;
         }
-        
+
         return tmp;
     }
 
