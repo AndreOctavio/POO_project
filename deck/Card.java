@@ -14,18 +14,29 @@ public class Card {
      */
     public Card(char v, char n) {
 
-        if (v == 84) {
-            value = 58;
-        } else if (v == 74) {
-            value = 59;
-        } else if (v == 81) {
-            value = 60;
-        } else if (v == 75) {
-            value = 61;
-        } else if (v == 65) {
-            value = 62;
-        } else {
-            value = v;
+        switch (v) {
+            case 84:
+                value = 58;
+                break;
+            case 74:
+                value = 59;
+                break;
+            case 81:
+                value = 60;
+                break;
+            case 75:
+                value = 61;
+                break;
+            case 65:
+                value = 62;
+                break;
+            default:
+                if (v > 49 && v < 58) {
+                    value = v;
+                } else {
+                    System.out.println("Invalid card in card-file, please use a valid file.");
+                    System.exit(0);
+                }
         }
 
         naipe = n;

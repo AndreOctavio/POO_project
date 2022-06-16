@@ -39,7 +39,8 @@ public class DebugMode extends Game {
                 if (i + 1 != commandsArray.length) {
                     try {
                         bet = Integer.parseInt(commandsArray[i + 1]); // convert the string next to b into an int
-                    } catch (NumberFormatException e) { // if it can't do it, then it's another command, bet amout is equal
+                    } catch (NumberFormatException e) { // if it can't do it, then it's another command, bet amout is
+                                                        // equal
                                                         // to last bet (5 if first bet)
                         bet = p_bet;
                         i--;
@@ -109,7 +110,7 @@ public class DebugMode extends Game {
                     for (Card tmp2 : player.hand) { // print player's hand
                         System.out.print(tmp2.reverse(tmp2) + " ");
                     }
-            
+
                     deal = -1;
                     result(identifyHand(player.hand, bet));
                     player.hand.clear();
@@ -134,10 +135,10 @@ public class DebugMode extends Game {
                 i++;
             } else if (commandsArray[i].equals("s")) { // command statistics
                 System.out.println("\n-cmd s");
-                statistics((player.sum_of_all_gains/sum_of_all_bets) * 100);
+                statistics((player.sum_of_all_gains / sum_of_all_bets) * 100);
                 i++;
             } else {
-                System.out.print("\n" + commandsArray[i] + ": illegal command");
+                System.out.println("\n" + commandsArray[i] + ": illegal command");
                 i++;
             }
         }
@@ -146,10 +147,10 @@ public class DebugMode extends Game {
     /**
      * Gets 5 cards from deckOfcards and gives them to players hand.
      *
-     * It's a different method then the one in SimulationMode 
+     * It's a different method then the one in SimulationMode
      * because in this mode you dont need to shuffle.
      */
-    public void deal () {
+    public void deal() {
         hands_count[10]++;
 
         for (int i = 0; i < 5; i++) {
@@ -162,7 +163,7 @@ public class DebugMode extends Game {
     /**
      * Replaces the cards that the player doesn't want.
      * 
-     * It's a different method then the one in SimulationMode 
+     * It's a different method then the one in SimulationMode
      * because in this mode you dont take random cards from the deck.
      * 
      * @param h list with the index of the cards that player wants in his hand.
