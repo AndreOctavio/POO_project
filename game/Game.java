@@ -12,6 +12,7 @@ abstract class Game {
     public Player player;
     public Deck deckOfcards;
     protected int[] hands_count = new int[11];
+    protected int low_pair;
 
     /**
      * Constructs Game, player with money m.
@@ -64,12 +65,15 @@ abstract class Game {
      * @param h hand of the player.
      * @param b amout of the bet.
      */
-    public int identifyHand(List<Card> h, int b) {
-        h = player.organiseHand(h);
+    public int identifyHand(List<Card> hand, int b) {
+        List<Card> h = new ArrayList<Card>();
+
+        h = player.organiseHand(hand);
         boolean s = straight(h);
         int[] cont = { 1, 0, 0, 0 }; // index 0 cont of equal cards, index 1 cont of pairs,
                                      // index 2 cont of triples, index 3 cont of four of a kind
         int goodPair = 0;
+        int badPair = 0;
         if (flush(h)) {
             if (h.get(2).value == 60 && s) {
                 if (b < 5) { // player bet 1/2/3/4 credits
@@ -101,6 +105,9 @@ abstract class Game {
                     if (cont[0] == 2) { // Pair
                         if (h.get(i).value > 58) { // Check if it's a good pair
                             goodPair++;
+                        } else {
+                            badPair++;
+                            low_pair = h.get(i).value;
                         }
                     }
                     cont[cont[0] - 1]++; // increment counters
@@ -120,6 +127,8 @@ abstract class Game {
                 player.gain(b);
                 hands_count[0]++;
                 return 1;
+            } else if (cont[1] == 1 && badPair == 1) { // LowPair
+                return 12;
             } else if (cont[2] == 1) { // Three of a kind
                 player.gain(b * 3);
                 hands_count[2]++;
@@ -163,7 +172,7 @@ abstract class Game {
     }
 
     /**
-     * Checks if the if the h hand is a straight.
+     * Checks if the h hand is a straight.
      * 
      * @param h hand of the player.
      * @return true/false.
@@ -182,6 +191,217 @@ abstract class Game {
         }
 
         return true;
+    }
+
+    public boolean isRoyal(Card c) {
+        for (int i = 58; i <= 62; i++){
+            if(c.value == i){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public List<Integer> straight_count(List<Card> orig_hand) {
+        
+        int new_count = 0;
+
+        // [number of straight cards, in_straight, out_straight, index of those cards in hand]
+        List<Integer> str_index = new ArrayList<Integer>();
+        str_index.add(0);
+        str_index.add(0);
+        str_index.add(1);
+
+        List<Card> h = player.organiseHand(orig_hand);
+
+        // max value of a card in order to be part of the straight currently being
+        // evaluated in the loop
+        int max_val = 0;
+        int in_straight = 0;
+        int out_straight = 1;
+        int j;
+
+        // loop through first 3 cards (i is the index of the straight start card)
+        for (int i = 0; i < 5 && i != 3 && i != 4; i++) {
+
+            j = i;
+            
+            // add current card as if it was part of a possible straight
+            str_index.add(orig_hand.indexOf(h.get(i)));
+
+            // the max value of a card that is part of the current straight
+            max_val = h.get(i).value + 4;
+            new_count++;
+
+            if(h.get(i).value == 62){
+                max_val = 53;
+                j = 0;
+            }
+
+            // loop cards in front
+            for(int n = j; n < 4; n++){
+                // check if next card is the continuation of a straight
+                if (h.get(n).value == h.get(n + 1).value + 1) {
+                    str_index.add(orig_hand.indexOf(h.get(n + 1)));
+                    new_count++;
+
+                // in this case we have a low Ace and it´s the first iteration
+                } else if (j != i && n == j) {
+                    if(h.get(n + 1).value == '2'){
+                        str_index.add(orig_hand.indexOf(h.get(n + 1)));
+                        new_count++;
+                    }
+
+                // check if the next card is part of a possible straight
+                // if we get to this point, then the card isn´t the next possible
+                // value which means we have an inside straight
+                } else if (h.get(n + 1).value <= max_val && h.get(n + 1).value != h.get(n).value) { // inside straight
+                    new_count++;
+                    in_straight = 1;
+                    out_straight = 0;
+                    str_index.add(orig_hand.indexOf(h.get(n + 1)));
+                }
+            }
+
+            // if there isn´t a 3 or 4 to a straight we clear the list and
+            // reset it to its original state
+
+            /* DIDN´T FIND SEMI STRAIGHT */
+            if (new_count < 3){
+
+                for (i = str_index.size() - 1; i > str_index.get(0) + 2; i--){
+                    str_index.remove(i);
+                }
+
+                in_straight = 0;
+                out_straight = 1;
+                new_count++;
+            
+            /* FOUND SEMI STRAIGHT */
+            } else {
+
+                /* Remove old semi straight if (old is 3, new is any) or (old is 4, new is 4) */
+                if (str_index.get(0) == 3 || (str_index.get(0) == 4 && new_count == 4)){
+                    for (i = str_index.size() - new_count - 1; i > 2; i--){
+                        str_index.remove(i);
+                    }
+                }
+
+                /* Remove new semi straight if (old is 4, new is 3) */
+                if (str_index.get(0) == 4 && new_count == 3){
+                    for (i = str_index.size() - 1; i > 3 + 2; i--){
+                        str_index.remove(i);
+                    }
+                }
+
+                str_index.set(0, new_count);
+                str_index.set(1, in_straight);
+                str_index.set(2, out_straight);
+
+                in_straight = 0;
+                out_straight = 1;
+            }
+            
+        }
+
+        return str_index;
+
+    }
+    /**
+     * Will tell you what cards to hold
+     * 
+     * @param orig_hand player hand
+     * @return indexes cards to hold
+     */
+    public List<Integer> strategy(List<Card> orig_hand) {
+
+        int hand_value = 0;
+        List<Integer> hold = new ArrayList<Integer>();
+        int i = 0;
+        int aux = 0;
+
+        List<Card> changed_hand = player.organiseHand(orig_hand);
+        List<Integer> str_index = new ArrayList<Integer>();
+
+        int  id_hand = identifyHand(changed_hand, 0);
+
+        // Value 1  <--
+        /* Straight flush, four of a kind, royal flush */
+        if (id_hand > 6){
+            hand_value = 1;
+            for(i = 1; i < 6; i++){
+                hold.add(i);
+            }
+            return hold;
+        }
+        
+        /* checks how many cards there are to a straight */
+        str_index = straight_count(orig_hand);
+
+        // Value 2  <--
+        /* 4 to Royal Flush */
+        if(str_index.get(0) == 4) {
+            aux = 1;
+            
+            if(!isRoyal(orig_hand.get(str_index.get(3)))){
+                aux = 0;
+            }
+
+            for(i = 3; i < 6 && aux != 0; i++){
+                /* Check if all cards from possible straight are part of a Royal */
+                if(!isRoyal(orig_hand.get(str_index.get(i + 1)))){
+                    aux = 0;
+                    break;
+                }
+                if(orig_hand.get(str_index.get(i)).naipe != orig_hand.get(str_index.get(i + 1)).naipe){
+                    aux = 0;
+                    break;
+                }
+            }
+
+            /* we have a 4 to Royal Flush */
+            if (aux == 1){
+                for(i = 3; i < 6 && aux != 0; i++){
+                    hold.add(str_index.get(i));
+                }
+                return hold;
+            }
+        }
+        hold.removeAll(hold);
+
+        // Value 3  <--
+        /* Three aces */
+        if(id_hand == 3){
+            if (changed_hand.get(2).value == 62){
+                i = 1;
+                for(Card temp : orig_hand){
+                    if(temp.value == 62){
+                        hold.add(i);
+                    }
+                    i++;
+                }
+                return hold;
+            }
+        }
+        
+        long countCopas = orig_hand
+                            .stream()
+                            .filter(c -> c.naipe == 62)
+                            .count();
+
+        // Value 12 <--
+        /* Low Pair */
+        if(id_hand == 12){
+            for(Card temp : orig_hand){
+                if(temp.value == low_pair){
+                    hold.add(i);
+                }
+                i++;
+            }
+            return hold;
+        }
+
+        return hold;
     }
 
     /**

@@ -185,9 +185,6 @@ public class DebugMode extends Game {
     public void result(int name_hand) {
 
         switch (name_hand) {
-            case 0: // the player has no hand
-                System.out.println("\nplayer loses and his credit is " + player.money);
-                break;
             case 11: // player has a ROYAL FLUSH
                 System.out.println("\nplayer wins with a ROYAL FLUSH and his credit is " + (player.money));
                 break;
@@ -221,6 +218,10 @@ public class DebugMode extends Game {
             case 1: // player has a JACKS OR BETTER
                 System.out.println("\nplayer wins with a JACKS OR BETTER and his credit is " + (player.money));
                 break;
+            default:
+                System.out.println("\nplayer loses and his credit is " + (player.money));
+                break;
+
         }
 
     }

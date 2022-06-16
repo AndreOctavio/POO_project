@@ -77,7 +77,6 @@ public class Player {
                 i++;
             }
             order.add(h.get(i));
-            h.remove(h.get(i));
             n++;
             i = 0;
         }
