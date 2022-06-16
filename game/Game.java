@@ -58,7 +58,7 @@ abstract class Game {
     }
 
     /**
-     * Identifies the type of hand that the player has and 
+     * Identifies the type of hand that the player has and
      * gives the credit that he won, if he has a good hand.
      * 
      * @param h hand of the player.
@@ -70,7 +70,7 @@ abstract class Game {
         int[] cont = { 1, 0, 0, 0 }; // index 0 cont of equal cards, index 1 cont of pairs,
                                      // index 2 cont of triples, index 3 cont of four of a kind
         int goodPair = 0;
-        if (flush(h)) {
+        if (flush(h) == 100) {
             if (h.get(2).value == 60 && s) {
                 if (b < 5) { // player bet 1/2/3/4 credits
                     player.gain(b * 250);
@@ -149,17 +149,41 @@ abstract class Game {
      * Checks if the if the h hand is a flush.
      * 
      * @param h hand of the player.
-     * @return true/false.
+     * @return integer with the values 3 or 4, which indicates the number of cards
+     *         with the same suit in the players' hand
      */
-    public boolean flush(List<Card> h) {
+    public int flush(List<Card> h) {
+
+        int naipe_counter[] = { 0, 0, 0, 0 };
 
         for (Card tmp : h) {
-            if (tmp.naipe != h.get(4).naipe) {
-                return false;
+            switch (tmp.naipe) {
+                case ('C'):
+                    naipe_counter[0]++;
+                    break;
+                case ('D'):
+                    naipe_counter[1]++;
+                    break;
+                case ('H'):
+                    naipe_counter[2]++;
+                    break;
+                case ('S'):
+                    naipe_counter[3]++;
+                    break;
             }
         }
 
-        return true;
+        for (int aux : naipe_counter) {
+            System.out.println(aux);
+            switch (aux) {
+                case (3):
+                    return 3;
+
+                case (4):
+                    return 4;
+            }
+        }
+        return 0;
     }
 
     /**
@@ -172,15 +196,16 @@ abstract class Game {
         int cont = 1;
 
         for (int i = 0; i < 4; i++) {
-            if (h.get(i).value == h.get(i + 1).value + 1) {
+
+            if ((h.get(i).value + 1) == h.get(i + 1).value) {
                 cont++;
+                System.out.println(cont);
             } else if (h.get(0).value == '2' && h.get(4).value == 62 && cont == 4) {
                 return true;
             } else {
                 return false;
             }
         }
-
         return true;
     }
 
@@ -190,20 +215,20 @@ abstract class Game {
      * @param N13 "theoretical returned"
      */
     public void statistics(double N13) {
-        System.out.println("Hand               Nb");
+        System.out.println("Hand Nb");
         System.out.println("______________________");
-        System.out.println("Jacks or Better      " + hands_count[0]);
-        System.out.println("Two Pair             " + hands_count[1]);
-        System.out.println("Three of a kind      " + hands_count[2]);
-        System.out.println("Straight             " + hands_count[3]);
-        System.out.println("Flush                " + hands_count[4]);
-        System.out.println("Full House           " + hands_count[5]);
-        System.out.println("Four of a Kind       " + hands_count[6]);
-        System.out.println("Straight Flush       " + hands_count[7]);
-        System.out.println("Royal Flush          " + hands_count[8]);
-        System.out.println("Other                " + hands_count[9]);
+        System.out.println("Jacks or Better " + hands_count[0]);
+        System.out.println("Two Pair " + hands_count[1]);
+        System.out.println("Three of a kind " + hands_count[2]);
+        System.out.println("Straight " + hands_count[3]);
+        System.out.println("Flush " + hands_count[4]);
+        System.out.println("Full House " + hands_count[5]);
+        System.out.println("Four of a Kind " + hands_count[6]);
+        System.out.println("Straight Flush " + hands_count[7]);
+        System.out.println("Royal Flush " + hands_count[8]);
+        System.out.println("Other " + hands_count[9]);
         System.out.println("______________________");
-        System.out.println("Total                 " + hands_count[10]);
-        System.out.println("Credit                " + player.money + " (" + N13 + "%)");
+        System.out.println("Total " + hands_count[10]);
+        System.out.println("Credit " + player.money + " (" + N13 + "%)");
     }
 }

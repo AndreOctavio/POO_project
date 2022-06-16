@@ -67,10 +67,10 @@ public class Player {
         for (Card tmp : h) {
             hand[n] = tmp.value;
             n++;
-        }   
+        }
 
         n = 0;
-        Arrays.sort(hand, 0, 4);
+        Arrays.sort(hand);
 
         while (n < 5) {
             while (hand[n] != h.get(i).value) {
