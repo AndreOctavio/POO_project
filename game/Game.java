@@ -365,10 +365,12 @@ abstract class Game {
         // Value 1  <--
         /* Straight flush, four of a kind, royal flush */
         if (id_hand > 6){
-            hand_value = 1;
+
+            /* add all cards to hold */
             for(i = 1; i < 6; i++){
                 hold.add(i);
             }
+
             return hold;
         }
         
@@ -380,6 +382,7 @@ abstract class Game {
         /* 4 to Royal Flush */
         if(str_index.get(0) == 4) {
             aux = 1;
+            /* Check if first card from possible straight are part of a Royal */
             if(!isRoyal(orig_hand.get(str_index.get(3) - 1))){
                 aux = 0;
             }
@@ -389,6 +392,8 @@ abstract class Game {
                     aux = 0;
                     break;
                 }
+
+                /* check if all of them have the same suit */
                 if(orig_hand.get(str_index.get(i) - 1).naipe != orig_hand.get(str_index.get(i + 1) - 1).naipe){
                     aux = 0;
                     break;
@@ -403,12 +408,15 @@ abstract class Game {
                 return hold;
             }
         }
-        hold.removeAll(hold);
 
+        
         // Value 3  <--
         /* Three aces */
         if(id_hand == 3){
+
+            /* in the ordered hand, the middle card will always be part of the three of a kind */
             if (changed_hand.get(2).value == 62){
+
                 i = 1;
                 for(Card temp : orig_hand){
                     if(temp.value == 62){
@@ -420,10 +428,64 @@ abstract class Game {
             }
         }
         
-        long countCopas = orig_hand
-                            .stream()
-                            .filter(c -> c.naipe == 62)
-                            .count();
+        // Value 4
+        /* Straight, flush, full house */
+        if (id_hand == 4 || id_hand == 5 || id_hand == 6){
+
+            /* add all cards to hold */
+            for(i = 1; i < 6; i++){
+                hold.add(i);
+            }
+
+            return hold;
+        }
+        
+        // Value 5  <--
+        /* Three aces */
+        if(id_hand == 3){
+
+            /* in the ordered hand, the middle card will always be part of the three of a kind */
+            i = 1;
+            for(Card temp : orig_hand){
+                if(temp.value == changed_hand.get(2).value){
+                    hold.add(i);
+                }
+                i++;
+            }
+            return hold;
+        }
+
+        // Value 10  <--
+        /* 3 to Royal Flush */
+        if(str_index.get(0) == 3) {
+            aux = 1;
+            
+            if(!isRoyal(orig_hand.get(str_index.get(3)))){
+                aux = 0;
+            }
+
+            for(i = 3; i < 5 && aux != 0; i++){
+                /* Check if all cards from possible straight are part of a Royal */
+                if(!isRoyal(orig_hand.get(str_index.get(i + 1)))){
+                    aux = 0;
+                    break;
+                }
+
+                /* check if all of them have the same suit */
+                if(orig_hand.get(str_index.get(i)).naipe != orig_hand.get(str_index.get(i + 1)).naipe){
+                    aux = 0;
+                    break;
+                }
+            }
+
+            /* we have a 4 to Royal Flush */
+            if (aux == 1){
+                for(i = 3; i < 7 && aux != 0; i++){
+                    hold.add(str_index.get(i));
+                }
+                return hold;
+            }
+        }
 
         // Value 12 <--
         /* Low Pair */
