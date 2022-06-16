@@ -61,10 +61,13 @@ public class Player {
 
     public List<Card> organiseHand(List<Card> h) {
         List<Card> order = new ArrayList<Card>();
+        List<Card> aux = new ArrayList<Card>();
+
         char[] hand = new char[5];
         int n = 0, i = 0;
 
         for (Card tmp : h) {
+            aux.add(tmp);
             hand[n] = tmp.value;
             n++;
         }
@@ -73,10 +76,11 @@ public class Player {
         Arrays.sort(hand);
 
         while (n < 5) {
-            while (hand[n] != h.get(i).value) {
+            while (hand[n] != aux.get(i).value) {
                 i++;
             }
-            order.add(h.get(i));
+            order.add(aux.get(i));
+            aux.remove(aux.get(i));
             n++;
             i = 0;
         }

@@ -31,7 +31,7 @@ public class Card {
                 value = 62;
                 break;
             default:
-                if (v > 49 && v < 58) {
+                if (v > 49 && v < 63) {
                     value = v;
                 } else {
                     System.out.println("Invalid card in card-file, please use a valid file.");

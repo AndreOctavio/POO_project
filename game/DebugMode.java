@@ -3,6 +3,7 @@ package game;
 import deck.Card;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 public class DebugMode extends Game {
 
@@ -97,7 +98,7 @@ public class DebugMode extends Game {
 
                 i += hold.size() + 1;
 
-                System.out.print("\n-cmd h ");
+                System.out.print("\n\n-cmd h ");
 
                 for (n = 0; n < hold.size(); n++) { // print the integers read next to h command
                     System.out.print(hold.get(n) + " ");
@@ -123,6 +124,7 @@ public class DebugMode extends Game {
                 System.out.print("\n-cmd a");
                 if (deal == 1) { // check if command a is llegal
                     hold = advice(player.hand);
+                    Collections.sort(hold);
                     System.out.print("\nplayer should hold cards ");
 
                     for (n = 0; n < hold.size(); n++) { // print which cards the player needs to hold
@@ -131,7 +133,7 @@ public class DebugMode extends Game {
                 } else {
                     System.out.print("\na: illegal command\n");
                 }
-
+                hold.removeAll(hold);
                 i++;
             } else if (commandsArray[i].equals("s")) { // command statistics
                 System.out.println("\n-cmd s");

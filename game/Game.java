@@ -53,11 +53,6 @@ abstract class Game {
      */
     public abstract void doHold(List<Integer> h);
 
-    public List<Integer> advice(List<Card> hand) {
-        List<Integer> hold = new ArrayList<Integer>();
-        return hold;
-    }
-
     /**
      * Identifies the type of hand that the player has and
      * gives the credit that he won, if he has a good hand.
@@ -128,7 +123,7 @@ abstract class Game {
                 hands_count[0]++;
                 return 1;
             } else if (cont[1] == 1 && badPair == 1) { // LowPair
-                return 12;
+                return -1;
             } else if (cont[2] == 1) { // Three of a kind
                 player.gain(b * 3);
                 hands_count[2]++;
@@ -158,12 +153,26 @@ abstract class Game {
      * Checks if the if the h hand is a flush.
      * 
      * @param h hand of the player.
+     * @return true/false.
+     */
+    public boolean flush(List<Card> h) {
+        for (Card tmp : h) {
+            if (tmp.naipe != h.get(4).naipe) {
+                return false;
+            }
+        }
+        return true;
+    }
+    /**
+     * Checks if the if the h hand is a flush.
+     * 
+     * @param h hand of the player.
      * @return integer with the values 3 or 4, which indicates the number of cards
      *         with the same suit in the players' hand
      */
-    public int flush(List<Card> h) {
+    public int flush_count(List<Card> h) {
 
-        int naipe_counter[] = { 0, 0, 0, 0 };
+        int naipe_counter[] = { 0, 0, 0, 0};
 
         for (Card tmp : h) {
             switch (tmp.naipe) {
@@ -183,7 +192,6 @@ abstract class Game {
         }
 
         for (int aux : naipe_counter) {
-            System.out.println(aux);
             switch (aux) {
                 case (3):
                     return 3;
@@ -208,7 +216,6 @@ abstract class Game {
 
             if ((h.get(i).value + 1) == h.get(i + 1).value) {
                 cont++;
-                System.out.println(cont);
             } else if (h.get(0).value == '2' && h.get(4).value == 62 && cont == 4) {
                 return true;
             } else {
@@ -247,12 +254,12 @@ abstract class Game {
         int j;
 
         // loop through first 3 cards (i is the index of the straight start card)
-        for (int i = 0; i < 5 && i != 3 && i != 4; i++) {
+        for (int i = 0; i < 5; i++) {
 
             j = i;
             
             // add current card as if it was part of a possible straight
-            str_index.add(orig_hand.indexOf(h.get(i)));
+            str_index.add(orig_hand.indexOf(h.get(i)) + 1);
 
             // the max value of a card that is part of the current straight
             max_val = h.get(i).value + 4;
@@ -266,14 +273,14 @@ abstract class Game {
             // loop cards in front
             for(int n = j; n < 4; n++){
                 // check if next card is the continuation of a straight
-                if (h.get(n).value == h.get(n + 1).value + 1) {
-                    str_index.add(orig_hand.indexOf(h.get(n + 1)));
+                if (((h.get(n).value + 1) == h.get(n + 1).value) && h.get(n + 1).value <= max_val) {
+                    str_index.add(orig_hand.indexOf(h.get(n + 1)) + 1);
                     new_count++;
 
                 // in this case we have a low Ace and it´s the first iteration
                 } else if (j != i && n == j) {
                     if(h.get(n + 1).value == '2'){
-                        str_index.add(orig_hand.indexOf(h.get(n + 1)));
+                        str_index.add(orig_hand.indexOf(h.get(n + 1)) + 1);
                         new_count++;
                     }
 
@@ -284,7 +291,7 @@ abstract class Game {
                     new_count++;
                     in_straight = 1;
                     out_straight = 0;
-                    str_index.add(orig_hand.indexOf(h.get(n + 1)));
+                    str_index.add(orig_hand.indexOf(h.get(n + 1)) + 1);
                 }
             }
 
@@ -294,8 +301,8 @@ abstract class Game {
             /* DIDN´T FIND SEMI STRAIGHT */
             if (new_count < 3){
 
-                for (i = str_index.size() - 1; i > str_index.get(0) + 2; i--){
-                    str_index.remove(i);
+                for (int inad = str_index.size() - 1; inad > str_index.get(0) + 2; inad--){
+                    str_index.remove(inad);
                 }
 
                 in_straight = 0;
@@ -307,25 +314,30 @@ abstract class Game {
 
                 /* Remove old semi straight if (old is 3, new is any) or (old is 4, new is 4) */
                 if (str_index.get(0) == 3 || (str_index.get(0) == 4 && new_count == 4)){
-                    for (i = str_index.size() - new_count - 1; i > 2; i--){
-                        str_index.remove(i);
+                    for (int inad = str_index.size() - new_count - 1; inad > 2; inad--){
+                        str_index.remove(inad);
                     }
+                    str_index.set(0, new_count);
+                    str_index.set(1, in_straight);
+                    str_index.set(2, out_straight);
                 }
 
                 /* Remove new semi straight if (old is 4, new is 3) */
                 if (str_index.get(0) == 4 && new_count == 3){
-                    for (i = str_index.size() - 1; i > 3 + 2; i--){
-                        str_index.remove(i);
+                    for (int a = str_index.size() - 1; a > 4 + 2; a--){
+                        str_index.remove(a);
                     }
+                } else {
+                    str_index.set(0, new_count);
+                    str_index.set(1, in_straight);
+                    str_index.set(2, out_straight);
                 }
 
-                str_index.set(0, new_count);
-                str_index.set(1, in_straight);
-                str_index.set(2, out_straight);
 
                 in_straight = 0;
                 out_straight = 1;
             }
+            new_count = 0;
             
         }
 
@@ -338,7 +350,7 @@ abstract class Game {
      * @param orig_hand player hand
      * @return indexes cards to hold
      */
-    public List<Integer> strategy(List<Card> orig_hand) {
+    public List<Integer> advice (List<Card> orig_hand) {
 
         int hand_value = 0;
         List<Integer> hold = new ArrayList<Integer>();
@@ -363,22 +375,21 @@ abstract class Game {
         /* checks how many cards there are to a straight */
         str_index = straight_count(orig_hand);
 
+
         // Value 2  <--
         /* 4 to Royal Flush */
         if(str_index.get(0) == 4) {
             aux = 1;
-            
-            if(!isRoyal(orig_hand.get(str_index.get(3)))){
+            if(!isRoyal(orig_hand.get(str_index.get(3) - 1))){
                 aux = 0;
             }
-
             for(i = 3; i < 6 && aux != 0; i++){
                 /* Check if all cards from possible straight are part of a Royal */
-                if(!isRoyal(orig_hand.get(str_index.get(i + 1)))){
+                if(!isRoyal(orig_hand.get(str_index.get(i + 1) - 1))){
                     aux = 0;
                     break;
                 }
-                if(orig_hand.get(str_index.get(i)).naipe != orig_hand.get(str_index.get(i + 1)).naipe){
+                if(orig_hand.get(str_index.get(i) - 1).naipe != orig_hand.get(str_index.get(i + 1) - 1).naipe){
                     aux = 0;
                     break;
                 }
@@ -386,7 +397,7 @@ abstract class Game {
 
             /* we have a 4 to Royal Flush */
             if (aux == 1){
-                for(i = 3; i < 6 && aux != 0; i++){
+                for(i = 3; i < 7 && aux != 0; i++){
                     hold.add(str_index.get(i));
                 }
                 return hold;
@@ -416,7 +427,7 @@ abstract class Game {
 
         // Value 12 <--
         /* Low Pair */
-        if(id_hand == 12){
+        if(id_hand == -1){
             for(Card temp : orig_hand){
                 if(temp.value == low_pair){
                     hold.add(i);
