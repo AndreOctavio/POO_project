@@ -57,14 +57,14 @@ public class Deck {
      * 
      * @return random number
      */
-    public int getRandom(List<Integer> n, int l) {
+    public int getRandom(List<Integer> n) {
         Random rand = new Random();
         int random;
 
-        random = rand.nextInt(l);
+        random = rand.nextInt(52);
 
-        while (search(n, random) == true) {
-            random = rand.nextInt(l);
+        while (search(n, random)) {
+            random = rand.nextInt(52);
         }
 
         return random;

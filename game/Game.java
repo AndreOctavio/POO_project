@@ -12,7 +12,7 @@ abstract class Game {
     public Player player;
     public Deck deckOfcards;
     public List<Integer> hold;
-    protected int[] hands_count = new int[11];
+    public int[] hands_count = new int[11];
     protected int[] equal_cards = new int[5];
     protected int low_pair;
     protected char flush_naipe;
@@ -79,78 +79,73 @@ abstract class Game {
                 } else { // player bet 5 credits
                     player.gain(4000);
                 }
-                hands_count[8]++;
                 return 11;// Royal FLush
             } else if (s) {
                 player.gain(b * 50);
-                hands_count[7]++;
                 return 10;// Straight Flush
             } else {
                 player.gain(b * 7);
-                hands_count[4]++;
                 return 5;// Flush
             }
         } else {
             if (s) {
                 player.gain(b * 5);
-                hands_count[3]++;
                 return 4;// Straight
             }
             for (int i = 0; i < 4; i++) {
                 if (h.get(i).value == h.get(i + 1).value) { // Check if a card is equal to the next
                     cont[0]++;
-                    
-                } else if (cont[0] > 1) {
+                } 
+                
+                if (cont[0] > 1 && (h.get(i).value != h.get(i + 1).value || i == 3)) {
                     if (cont[0] == 2) { // Pair
                         if (h.get(i).value > 58) { // Check if it's a good pair
-                        goodPair++;
-                    } else {
-                        badPair++;
-                        low_pair = h.get(i).value;
+                            goodPair++;
+                        } else {
+                            badPair++;
+                            low_pair = h.get(i).value;
+                        }
                     }
+                    
+                    cont[cont[0] - 1]++; // increment counters
+                    cont[0] = 1; // reset card counter
+                    equal_cards[cont[1]] = h.get(i).value;
+                    // if we have a four of a kind, save its suit
+                    if (cont[0] == 4) {
+                        equal_cards[3] = h.get(i).value;
+                    }
+                    
                 }
-                cont[cont[0] - 1]++; // increment counters
-                cont[0] = 1; // reset card counter
                 
-                equal_cards[cont[1]] = h.get(i).value;
-
-                }
             }
             cont[cont[0] - 1]++;
+            equal_cards[cont[1]] = h.get(4).value;
             if (cont[1] == 1 && cont[2] == 1) { // Full House
                 player.gain(b * 10);
-                hands_count[5]++;
                 return 6;
             } else if (cont[1] == 2) { // Two Pair
                 player.gain(b);
-                hands_count[1]++;
                 return 2;
             } else if (cont[1] == 1 && goodPair == 1) { // Jacks or Better
                 player.gain(b);
-                hands_count[0]++;
                 return 1;
             } else if (cont[1] == 1 && badPair == 1) { // LowPair
                 return -1;
             } else if (cont[2] == 1) { // Three of a kind
                 player.gain(b * 3);
-                hands_count[2]++;
                 return 3;
             } else if (cont[3] == 1) { // Four of a kind
                 if (h.get(2).value < 53) { // Four 2–4
                     player.gain(b * 80);
-                    hands_count[6]++;
                     return 8;
                 } else if (h.get(2).value == 62) { // Four Aces
                     player.gain(b * 160);
-                    hands_count[6]++;
                     return 9;
                 } else { // Four 5-K
                     player.gain(b * 50);
-                    hands_count[6]++;
                     return 7;
                 }
             } else {
-                hands_count[9]++;
                 return 0; // nothing special about the hand
             }
         }
@@ -397,8 +392,8 @@ abstract class Game {
         int  id_hand = identifyHand(changed_hand, 0);
 
         // Value 1  <--
-        /* Straight flush, four of a kind, royal flush */
-        if (id_hand > 6){
+        /* Straight flush, royal flush */
+        if (id_hand > 9){
 
             /* add all cards to hold */
             for(i = 1; i < 6; i++){
@@ -406,7 +401,19 @@ abstract class Game {
             }
 
             return hold;
+        
+        /* Four of a kind */
+        } else if (id_hand > 6) {
+            i = 1;
+            for(Card temp : orig_hand){
+                if(temp.value == changed_hand.get(2).value){
+                    hold.add(i);
+                }
+                i++;
+            }
+            return hold;
         }
+
         
         /* checks how many cards there are to a straight */
         str_index = straight_count(orig_hand);
@@ -541,6 +548,7 @@ abstract class Game {
                 }
                 i++;
             }
+            return hold;
         }
 
         // Value 8 <--
@@ -553,6 +561,7 @@ abstract class Game {
                 }
                 i++;
             }
+            return hold;
         }
 
 
@@ -652,6 +661,7 @@ abstract class Game {
         // Value 12 <--
         /* Low Pair */
         if(id_hand == -1){
+            i = 0;
             for(Card temp : orig_hand){
                 if(temp.value == low_pair){
                     hold.add(i + 1);
@@ -737,7 +747,7 @@ abstract class Game {
      * @param N13 "theoretical returned"
      */
     public void statistics(double N13) {
-        System.out.println("Hand Nb");
+        System.out.println("Hand                Nb");
         System.out.println("______________________");
         System.out.println("Jacks or Better " + hands_count[0]);
         System.out.println("Two Pair " + hands_count[1]);

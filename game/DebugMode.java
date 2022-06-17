@@ -1,7 +1,6 @@
 package game;
 
 import deck.Card;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Collections;
 
@@ -189,41 +188,52 @@ public class DebugMode extends Game {
         switch (name_hand) {
             case 11: // player has a ROYAL FLUSH
                 System.out.println("\nplayer wins with a ROYAL FLUSH and his credit is " + (player.money));
+                hands_count[8]++;
                 break;
             case 10: // player has a STRAIGHT FLUSH
                 System.out.println("\nplayer wins with a STRAIGHT FLUSH and his credit is " + (player.money));
+                hands_count[7]++;
                 break;
             case 9: // player has a FOUR ACES
                 System.out.println("\nplayer wins with a FOUR ACES and his credit is " + (player.money));
+                hands_count[6]++;
                 break;
             case 8: // player has a FOUR 2-4
                 System.out.println("\nplayer wins with a FOUR 2-4 and his credit is " + (player.money));
+                hands_count[6]++;
                 break;
             case 7: // player has a FOUR 5-K
                 System.out.println("\nplayer wins with a FOUR 5-K and his credit is " + (player.money));
+                hands_count[6]++;
                 break;
             case 6: // player has a FULL HOUSE
                 System.out.println("\nplayer wins with a FULL HOUSE and his credit is " + (player.money));
+                hands_count[5]++;
                 break;
             case 5: // player has a FLUSH
                 System.out.println("\nplayer wins with a FLUSH and his credit is " + (player.money));
+                hands_count[4]++;
                 break;
             case 4: // player has a STRAIGHT
                 System.out.println("\nplayer wins with a STRAIGHT and his credit is " + (player.money));
+                hands_count[3]++;
                 break;
             case 3: // player has a THREE OF A KIND
                 System.out.println("\nplayer wins with a THREE OF A KIND and his credit is " + (player.money));
+                hands_count[2]++;
                 break;
             case 2: // player has a TWO PAIR
                 System.out.println("\nplayer wins with a TWO PAIR and his credit is " + (player.money));
+                hands_count[1]++;
                 break;
             case 1: // player has a JACKS OR BETTER
                 System.out.println("\nplayer wins with a JACKS OR BETTER and his credit is " + (player.money));
+                hands_count[0]++;
                 break;
             default:
                 System.out.println("\nplayer loses and his credit is " + (player.money));
+                hands_count[9]++;
                 break;
-
         }
 
     }

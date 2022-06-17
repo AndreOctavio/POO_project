@@ -74,7 +74,48 @@ public class Main {
                 sm.deal();
                 sm.hold = sm.advice(sm.player.hand);
                 sm.doHold(sm.hold);
-                sm.identifyHand(sm.player.hand, bet);
+
+                switch (sm.identifyHand(sm.player.hand, bet)) {
+                    case 11: // player has a ROYAL FLUSH
+                        sm.hands_count[8]++;
+                        break;
+                    case 10: // player has a STRAIGHT FLUSH
+                        sm.hands_count[7]++;
+                        break;
+                    case 9: // player has a FOUR ACES
+                        sm.hands_count[6]++;
+                        break;
+                    case 8: // player has a FOUR 2-4
+                        sm.hands_count[6]++;
+                        break;
+                    case 7: // player has a FOUR 5-K
+                        sm.hands_count[6]++;
+                        break;
+                    case 6: // player has a FULL HOUSE
+                        sm.hands_count[5]++;
+                        break;
+                    case 5: // player has a FLUSH
+                        sm.hands_count[4]++;
+                        break;
+                    case 4: // player has a STRAIGHT
+                        sm.hands_count[3]++;
+                        break;
+                    case 3: // player has a THREE OF A KIND
+                        sm.hands_count[2]++;
+                        break;
+                    case 2: // player has a TWO PAIR
+                        sm.hands_count[1]++;
+                        break;
+                    case 1: // player has a JACKS OR BETTER
+                        sm.hands_count[0]++;
+                        break;
+                    default:
+                        sm.hands_count[9]++;
+                        break;
+        
+                }
+
+                sm.player.hand.removeAll(sm.player.hand);
                 sm.hold.removeAll(sm.hold);
                 sm.excluded.removeAll(sm.excluded);
             }
