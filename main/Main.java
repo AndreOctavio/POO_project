@@ -72,10 +72,10 @@ public class Main {
             for (int i = nbdeals; i > 0; i--) {
                 sm.bet(bet);
                 sm.deal();
-                sm.hold = sm.advice(sm.player.hand);
+                sm.hold = sm.MasterKey.advice(sm.player.hand);
                 sm.doHold(sm.hold);
 
-                switch (sm.identifyHand(sm.player.hand, bet)) {
+                switch (sm.MasterKey.identifyHand(sm.player.hand, bet)) {
                     case 11: // player has a ROYAL FLUSH
                         sm.hands_count[8]++;
                         break;

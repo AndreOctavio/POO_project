@@ -1,6 +1,21 @@
 package game;
 
+import deck.Card;
+import player.Player;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class HandManager {
+
+    protected int[] equal_cards = new int[5];
+    protected int low_pair;
+    protected char flush_naipe;
+    Player player;
+
+    HandManager (Player p) {
+        player = p;
+    }
 
     /**
      * Identifies the type of hand that the player has and

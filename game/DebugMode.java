@@ -111,7 +111,7 @@ public class DebugMode extends Game {
                     }
 
                     deal = -1;
-                    result(identifyHand(player.hand, bet));
+                    result(MasterKey.identifyHand(player.hand, bet));
                     player.hand.clear();
                 } else {
                     System.out.println("\nh: illegal command");
@@ -121,7 +121,7 @@ public class DebugMode extends Game {
             } else if (commandsArray[i].equals("a")) { // command advice
                 System.out.print("\n-cmd a");
                 if (deal == 1) { // check if command a is llegal
-                    hold = advice(player.hand);
+                    hold = MasterKey.advice(player.hand);
                     Collections.sort(hold);
                     System.out.print("\nplayer should hold cards ");
 
