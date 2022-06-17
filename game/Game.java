@@ -12,6 +12,7 @@ abstract class Game {
     public Player player;
     public Deck deckOfcards;
     protected int[] hands_count = new int[11];
+    protected int[] equal_cards = new int[5];
     protected int low_pair;
     protected char flush_naipe;
 
@@ -97,17 +98,21 @@ abstract class Game {
             for (int i = 0; i < 4; i++) {
                 if (h.get(i).value == h.get(i + 1).value) { // Check if a card is equal to the next
                     cont[0]++;
+                    
                 } else if (cont[0] > 1) {
                     if (cont[0] == 2) { // Pair
                         if (h.get(i).value > 58) { // Check if it's a good pair
-                            goodPair++;
-                        } else {
-                            badPair++;
-                            low_pair = h.get(i).value;
-                        }
+                        goodPair++;
+                    } else {
+                        badPair++;
+                        low_pair = h.get(i).value;
                     }
-                    cont[cont[0] - 1]++; // increment counters
-                    cont[0] = 1; // reset card counter
+                }
+                cont[cont[0] - 1]++; // increment counters
+                cont[0] = 1; // reset card counter
+                
+                equal_cards[cont[1]] = h.get(i).value;
+
                 }
             }
             cont[cont[0] - 1]++;
@@ -246,6 +251,21 @@ abstract class Game {
         return false;
     }
 
+    /**
+     * Checks if the card c either a J, D, K, A.
+     * 
+     * @param c a card of the hand.
+     * @return true/false.
+     */
+    public boolean isHighCard(Card c) {
+        for (int i = 59; i <= 62; i++) {
+            if (c.value == i) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public List<Integer> straight_count(List<Card> orig_hand) {
         
         int new_count = 0;
@@ -364,7 +384,6 @@ abstract class Game {
      */
     public List<Integer> advice (List<Card> orig_hand) {
 
-        int hand_value = 0;
         List<Integer> hold = new ArrayList<Integer>();
         int i = 0;
         int aux = 0;
@@ -476,7 +495,7 @@ abstract class Game {
         }
         
         // Value 5  <--
-        /* Three aces */
+        /* Three of a kind */
         if(id_hand == 3){
 
             /* in the ordered hand, the middle card will always be part of the three of a kind */
@@ -490,7 +509,53 @@ abstract class Game {
             return hold;
         }
 
-        // Value 9
+        // Value 6 <--
+        /* 4 to a Straight Flush */
+        if(str_index.get(0) == 4) {
+            if(fls_cnt >= 4){
+                aux = 1;
+                for(i = 3; i < 7; i++){
+                    if(orig_hand.get(str_index.get(i) - 1).naipe != flush_naipe){
+                        aux = 0;
+                        hold.add(i + 1);
+                    }
+                }
+                if(aux == 1){
+                    for(i = 3; i < 7; i++){
+                        hold.add(str_index.get(i));
+                    }
+                } else {
+                    return hold;
+                }
+            }
+        }
+
+        // Value 7 <--
+        /* Two pair */
+        if(id_hand == 2) {
+            i = 1;
+            for(Card temp : orig_hand){
+                if(temp.value == equal_cards[1] || temp.value == equal_cards[2]){
+                    hold.add(i);
+                }
+                i++;
+            }
+        }
+
+        // Value 8 <--
+        /* High Pair (Jacks or Better) */
+        if(id_hand == 1) {
+            i = 1;
+            for(Card temp : orig_hand){
+                if(temp.value == equal_cards[1]){
+                    hold.add(i);
+                }
+                i++;
+            }
+        }
+
+
+        // Value 9 <--
         /* 4 to a Flush */
         if (fls_cnt == 4) {
             i = 0;
@@ -594,6 +659,72 @@ abstract class Game {
             }
             return hold;
         }
+
+        // Value 17
+        /* 3 to a Flush with 2 high cards */
+        if (fls_cnt == 3) {
+
+            int highcards_counter = 0; // counter of High Cards in 3 to a Flush
+
+            for (i = 0; i < 5; i++) {
+                if (orig_hand.get(i).naipe == flush_naipe) { // aux_hold saves the cards with the Flush's suit
+                    hold.add(i + 1);
+                    if (isHighCard(orig_hand.get(i))) { // checks if the card is a High Card
+                        highcards_counter++; // counter of High Cards in the hand
+                    }
+                }
+            }
+
+            if (highcards_counter != 2) { // no 2 High Cards were detected
+                hold.removeAll(hold); // the player doesn't hold any card
+            } else {
+                return hold; // the player holds the Flush cards
+            }
+        }
+
+        // Value 25
+        /* 3 to a Flush with 1 high cards */
+        if (fls_cnt == 3) {
+
+            int highcards_counter = 0; // counter of High Cards in 3 to a Flush
+
+            for (i = 0; i < 5; i++) {
+                if (orig_hand.get(i).naipe == flush_naipe) { // aux_hold saves the cards with the Flush's suit
+                    hold.add(i + 1);
+                    if (isHighCard(orig_hand.get(i))) { // checks if the card is a High Card
+                        highcards_counter++; // counter of High Cards in the hand
+                    }
+                }
+            }
+
+            if (highcards_counter != 1) { // no High Card was detected
+                hold.removeAll(hold); // the player doesn't hold any card
+            } else {
+                return hold; // the player holds the Flush cards
+            }
+        }
+
+        // Value 33
+        /* 3 to a Flush with 1 high cards */
+        if (fls_cnt == 3) {
+            int highcards_counter = 0; // counter of High Cards in 3 to a Flush
+
+            for (i = 0; i < 5; i++) {
+                if (orig_hand.get(i).naipe == flush_naipe) { // aux_hold saves the cards with the Flush's suit
+                    hold.add(i + 1);
+                    if (isHighCard(orig_hand.get(i))) { // checks if the card is a High Card
+                        highcards_counter++; // counter of High Cards in the hand
+                    }
+                }
+            }
+
+            if (highcards_counter != 0) { // no High Card was detected
+                hold.removeAll(hold); // the player doesn't hold any card
+            } else {
+                return hold; // the player holds the Flush cards
+            }
+        }
+
 
         return hold;
 
