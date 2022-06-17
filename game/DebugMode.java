@@ -31,7 +31,6 @@ public class DebugMode extends Game {
     public void Commands(String c) {
 
         String[] commandsArray = c.split(" "); // commandsArray has all the strings from cmd-file
-        List<Integer> hold = new ArrayList<Integer>(); // hold is used to know which cards to keep
         int i = 0, n, bet = 0, p_bet = 5, deal = -1, illegal = 0;
         double sum_of_all_bets = 0;
 

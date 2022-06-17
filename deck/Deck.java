@@ -49,7 +49,7 @@ public class Deck {
     }
 
     /**
-     * Gets a random number from 0 to l limit and check's if it is in list n-> n
+     * Gets a random number from 0 to l limit and check's if it is in n
      * list of integers
      * 
      * @param n list of integers

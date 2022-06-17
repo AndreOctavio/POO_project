@@ -11,6 +11,7 @@ abstract class Game {
 
     public Player player;
     public Deck deckOfcards;
+    public List<Integer> hold;
     protected int[] hands_count = new int[11];
     protected int low_pair;
     protected char flush_naipe;
@@ -23,7 +24,7 @@ abstract class Game {
     public Game(int m) {
         player = new Player(m);
         deckOfcards = new Deck();
-        /* deckOfcards.createDeck(); for simulation mode */
+        hold = new ArrayList<Integer>(); // hold is used to know which cards to keep
     }
 
     /**
