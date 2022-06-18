@@ -11,6 +11,7 @@ public class HandManager {
     protected int[] equal_cards = new int[5];
     protected int low_pair;
     protected char flush_naipe;
+    private int type;
     Player player;
 
     HandManager(Player p) {
@@ -413,7 +414,17 @@ public class HandManager {
                 /* FOUND A SEMI STRAIGHT */
             } else {
 
-                /* Remove old semi straight if (old is 3, new is any) or (old is 4, new is 4) */
+                /* Remove old semi straight if (old is 3, new is any) or (old is 4, new is 4) 
+                 * 
+                 * 
+                 * 
+                 * 
+                 * 
+                */
+
+
+
+
                 if (str_index.get(0) == 3 || (str_index.get(0) == 4 && new_count == 4)) {
                     for (int inad = str_index.size() - new_count - 1; inad > 2; inad--) {
                         str_index.remove(inad);
@@ -457,7 +468,7 @@ public class HandManager {
         
         List<Integer> hold = new ArrayList<Integer>();
         int i = 0;
-        int aux = 0;
+        int aux = 0, j = 0;
         int fls_cnt = 0;
         int high_straight = 0;
         int high_str_fls = 0;
@@ -763,17 +774,21 @@ public class HandManager {
                 return hold;
             }
 
-            // if ace-low, we will have 3 numbers of: {A, 2, 3, 4, 5}
+            // if ace-low, we will have 1 Ace and 2 numbers of: {2, 3, 4, 5}
             aux = 0;
+            j = 0;
             for (i = 3; i < 7; i++) {
                 aux_char = orig_hand.get(str_index.get(i) - 1).value;
+                if (aux_char == 62) {
+                    j++;
+                }
                 if (aux_char == 62 || aux_char == 50 || aux_char == 51 || aux_char == 52 || aux_char == 53) {
                     aux++;
                 }
             }
 
             // 1 gap || 2 gaps & 1 High || ace-low
-            if((str_index.get(1) == 1) || (str_index.get(1) == 2 && high_str_fls == 1) || (aux == 3)){
+            if((str_index.get(1) == 1) || (str_index.get(1) == 2 && high_str_fls == 1) || (aux == 2 && j == 1)){
                 
                 for(i = 3; i < 6; i++){
                     hold.add(str_index.get(i));
@@ -819,7 +834,6 @@ public class HandManager {
             return hold;
         }
 
-
         // Value 25
         /* 3 to a Flush with 1 high cards */
         if (fls_cnt == 3) {
@@ -855,14 +869,6 @@ public class HandManager {
             return hold;
         }
 
-        // Value 30
-        /*KT suited */
-        Values[1] = 58;
-        hold = CheckSuit(changed_hand, orig_hand, Values, "Suited");
-        if (hold.size() != 0) {
-            return hold;
-        }
-
         // Value 29
         /* Ace */
         index_values = hand_values(orig_hand, 0);
@@ -870,6 +876,14 @@ public class HandManager {
             for (i = 0; i < index_values.size(); i++) {
                 hold.add(index_values.get(i) + 1); // hold of the cards
             }
+            return hold;
+        }
+
+        // Value 30
+        /*KT suited */
+        Values[1] = 58;
+        hold = CheckSuit(changed_hand, orig_hand, Values, "Suited");
+        if (hold.size() != 0) {
             return hold;
         }
 
