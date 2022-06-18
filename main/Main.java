@@ -1,11 +1,9 @@
 package main;
 
 import game.DebugMode;
-/*import game.SimulationMode;*/
 import game.SimulationMode;
 
 import java.util.Scanner;
-
 import java.io.File; // Import the File class
 import java.io.FileNotFoundException; // Import this class to handle errors
 
@@ -20,12 +18,13 @@ public class Main {
             try {
                 credit = Integer.parseInt(args[1]); // verifies if the credit argument is an integer
             } catch (Exception e) {
-                System.out.println("error in the credit value"); // a valid credit was not inserted
+                System.out.println("error: wrong credit value"); // a valid credit was not inserted
                 System.exit(0);
             }
 
             if (!(args[2].equals("cmd-file")) || !(args[3].equals("card-file"))) { // detection of illegal file names
                 System.out.println("error: wrong file name");
+                System.exit(0);
             } else {
                 try {
                     File cmd_file = new File(args[2] + ".txt");
@@ -63,7 +62,7 @@ public class Main {
                 nbdeals = Integer.parseInt(args[3]); // verifies if the nbdeals argument is an integer
 
             } catch (Exception e) {
-                System.out.println("error in the parameters");
+                System.out.println("error: wrong parameters");
                 System.exit(0);
             }
 
@@ -112,7 +111,7 @@ public class Main {
                     default:
                         sm.hands_count[9]++;
                         break;
-        
+
                 }
 
                 sm.player.hand.removeAll(sm.player.hand);
@@ -120,10 +119,8 @@ public class Main {
                 sm.excluded.removeAll(sm.excluded);
             }
 
-            sm.statistics((sm.player.sum_of_all_gains/ sm.sum_of_all_bets) * 100);
+            sm.statistics((sm.player.sum_of_all_gains / sm.sum_of_all_bets) * 100);
 
-        } 
-
+        }
     }
-
 }
