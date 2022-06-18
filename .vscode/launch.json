@@ -10,7 +10,14 @@
             "request": "launch",
             "mainClass": "main.Main",
             "args": "-d 60 cmd-file card-file",
-            //"args": "-s 10000 5 1",
+            "projectName": "POO_project_d62d477e"
+        },
+        {
+            "type": "java",
+            "name": "Launch Main",
+            "request": "launch",
+            "mainClass": "main.Main",
+            "args": "-d 60 cmd-file card-file",
             "projectName": "POO_project_f7d24f5b"
         }
     ]

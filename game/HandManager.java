@@ -278,7 +278,7 @@ public class HandManager {
                 // value which means we have an inside straight
                 } else if (h.get(n + 1).value <= max_val && h.get(n + 1).value != h.get(n).value) { // inside straight
                     new_count++;
-                    in_straight = 1;
+                    in_straight++;
                     out_straight = 0;
                     str_index.add(orig_hand.indexOf(h.get(n + 1)) + 1);
                 }
@@ -345,6 +345,7 @@ public class HandManager {
         int i = 0;
         int aux = 0;
         int fls_cnt = 0;
+        int high_straight = 0;
 
         List<Card> changed_hand = player.organiseHand(orig_hand);
 
@@ -398,40 +399,6 @@ public class HandManager {
                 }
             }
         }
-
-
-
-        // if(str_index.get(0) == 4) {
-        //     aux = 1;
-        //     /* Check if first card from possible straight are part of a Royal */
-        //     if(!isRoyal(orig_hand.get(str_index.get(3) - 1))){
-        //         aux = 0;
-        //     }
-        //     for(i = 3; i < 6 && aux != 0; i++){
-        //         /* Check if all cards from possible straight are part of a Royal */
-        //         if(!isRoyal(orig_hand.get(str_index.get(i + 1) - 1))){
-        //             aux = 0;
-        //             break;
-        //         }
-
-        //         /* check if all of them have the same suit */
-        //         if(orig_hand.get(str_index.get(i) - 1).naipe != orig_hand.get(str_index.get(i + 1) - 1).naipe){
-
-        //             aux = 0;
-        //             break;
-        //         }
-        //     }
-
-        //     /* we have a 4 to Royal Flush */
-        //     if (aux == 1){
-
-        //         for(i = 3; i < 7 && aux != 0; i++){
-        //             hold.add(str_index.get(i));
-        //         }
-        //         return hold;
-        //     }
-        // }
-
         
         // Value 3  <--
         /* Three aces */
@@ -525,7 +492,6 @@ public class HandManager {
             return hold;
         }
 
-
         // Value 9 <--
         /* 4 to a Flush */
         if (fls_cnt == 4) {
@@ -538,37 +504,6 @@ public class HandManager {
             }
             return hold;
         }
-
-        // if (flush_count(changed_hand) == 4) { // It is a 4 to a Flush
-        //     char naipe = 0;
-
-        //     /* Search for the suit that doesn't belong to the Flush */
-        //     for (i = 0; i < 5; i++) { // scans the positions of orig_hand aray
-        //         if (i == 4) { // the last position doesn't have to make a comparison with its next card
-        //             hold.add(i + 1); // hold of the last card
-        //         } else if (orig_hand.get(i).naipe == orig_hand.get(i + 1).naipe) { // comparing 2 consecutive cards
-        //             naipe = orig_hand.get(i).naipe; // saving the suit value of the Flush
-        //             hold.add(i + 1); // hold of the card orig_card[i]
-        //         } else {
-        //             if (orig_hand.get(i).naipe == naipe) { // in case there's a "wrong" card in the middle
-        //                 hold.add(i + 1);
-        //             } else if (i == 0) { // if in the 1st iteration there's a card with a suit different from the
-        //                                  // Flush's suit
-        //                 if (orig_hand.get(i).naipe == orig_hand.get(2).naipe) { // suit of index 0 = suit index 2 ->
-        //                                                                         // suit of index 1 !=
-        //                     hold.add(i + 1);
-        //                 } else if (orig_hand.get(i).naipe != orig_hand.get(2).naipe) {
-        //                     hold.add(i + 2); // suit of index 0 != suit index 2 ->
-        //                     // suit of 1st card, orig_card[0] has a different suit from the Flush's suit
-        //                 }
-        //             } else {
-        //                 System.out.println("Error: problem in flsuh_count");
-        //             }
-        //             i++;
-        //         }
-        //     }
-        //     return hold;
-        // }
 
         // Value 10  <--
         /* 3 to Royal Flush */
@@ -589,35 +524,14 @@ public class HandManager {
             }
         }
 
-        // if(str_index.get(0) == 3) {
-        //     aux = 1;
-            
-        //     if(!isRoyal(orig_hand.get(str_index.get(3)))){
-        //         aux = 0;
-        //     }
-
-        //     for(i = 3; i < 5 && aux != 0; i++){
-        //         /* Check if all cards from possible straight are part of a Royal */
-        //         if(!isRoyal(orig_hand.get(str_index.get(i + 1)))){
-        //             aux = 0;
-        //             break;
-        //         }
-
-        //         /* check if all of them have the same suit */
-        //         if(orig_hand.get(str_index.get(i)).naipe != orig_hand.get(str_index.get(i + 1)).naipe){
-        //             aux = 0;
-        //             break;
-        //         }
-        //     }
-
-        //     /* we have a 4 to Royal Flush */
-        //     if (aux == 1){
-        //         for(i = 3; i < 7 && aux != 0; i++){
-        //             hold.add(str_index.get(i));
-        //         }
-        //         return hold;
-        //     }
-        // }
+        // Value 11 <--
+        // 4 to an Outside Straight
+        if((str_index.get(0) == 4 && str_index.get(2) == 1)){
+            for(i = 3; i < 7; i++){
+                hold.add(str_index.get(i));
+            }
+            return hold;
+        }
 
         // Value 12 <--
         /* Low Pair */
@@ -630,6 +544,45 @@ public class HandManager {
                 i++;
             }
             return hold;
+        }
+
+        // Value 14 <--
+        /* 3 to a Straight Flush (Type 1 - ) */
+        if(str_index.get(0) == 3) {
+            aux = 1;
+            for(i = 3; i < 6; i++){
+                if(orig_hand.get(str_index.get(i) - 1).naipe != flush_naipe){
+                    aux = 0;
+                }
+                if(isHighCard(orig_hand.get(str_index.get(i) - 1))){
+                    high_straight++;
+                }
+            }
+            if(aux == 1){
+                for(i = 3; i < 7; i++){
+                    hold.add(str_index.get(i));
+                }
+            } else {
+                return hold;
+            }
+            
+        }
+
+        // Value 15
+        /* 4 to an inside Straight with 3 High Cards */
+        if((str_index.get(0) == 4 && str_index.get(1) >= 1)){
+
+            for(i = 3; i < 7; i++){
+                hold.add(str_index.get(i));
+                if(isHighCard(orig_hand.get(str_index.get(i) - 1))){
+                    high_straight++;
+                }
+            }
+            if(high_straight != 3){
+                hold.removeAll(hold);
+            } else {
+                return hold;
+            }
         }
 
         // Value 17
@@ -654,6 +607,26 @@ public class HandManager {
             }
         }
 
+        // Value 19
+        /* 4 to an inside Straight with 2 High Cards */
+        if((str_index.get(0) == 4 && str_index.get(1) >= 1 && high_straight == 2)){
+
+            for(i = 3; i < 7; i++){
+                hold.add(str_index.get(i));
+            }
+            return hold;
+        }
+
+        // Value 21
+        /* 4 to an inside Straight with 1 High Cards */
+        if((str_index.get(0) == 4 && str_index.get(1) >= 1 && high_straight == 1)){
+
+            for(i = 3; i < 7; i++){
+                hold.add(str_index.get(i));
+            }
+            return hold;
+        }
+
         // Value 25
         /* 3 to a Flush with 1 high cards */
         if (fls_cnt == 3) {
@@ -674,6 +647,16 @@ public class HandManager {
             } else {
                 return hold; // the player holds the Flush cards
             }
+        }
+
+        // Value 32
+        /* 4 to an inside Straight with no High Cards */
+        if((str_index.get(0) == 4 && str_index.get(1) >= 1 && high_straight == 0)){
+
+            for(i = 3; i < 7; i++){
+                hold.add(str_index.get(i));
+            }
+            return hold;
         }
 
         // Value 33
