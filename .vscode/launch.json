@@ -10,6 +10,7 @@
             "request": "launch",
             "mainClass": "main.Main",
             "args": "-d 60 cmd-file card-file",
+            //"args": "-s 10000 5 100",
             "projectName": "POO_project_d62d477e"
         },
         {

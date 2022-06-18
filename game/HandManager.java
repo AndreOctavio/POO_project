@@ -223,6 +223,14 @@ public class HandManager {
         return false;
     }
 
+    /**
+     * Verifies if the hand is a 4 to a straight or a 3 to a straight and
+     * if it is an inside or an outside straight
+     * 
+     * @param orig_hand
+     * @return str_index, an ArrayList with: 
+     * [number of straight cards, in_straight (count of gaps), out_straight, [index of those cards in the original hand]]
+     */
     public List<Integer> straight_count(List<Card> orig_hand) {
         
         int new_count = 0;
@@ -241,12 +249,14 @@ public class HandManager {
         int in_straight = 0;
         int out_straight = 1;
         int j;
+        boolean first = true;
 
-        // loop through first 3 cards (i is the index of the straight start card)
+        // loop through cards (i is the index of the straight start card)
         for (int i = 0; i < 5; i++) {
 
             j = i;
-            
+            first = true;
+
             // add current card as if it was part of a possible straight
             str_index.add(orig_hand.indexOf(h.get(i)) + 1);
 
@@ -259,18 +269,27 @@ public class HandManager {
                 j = 0;
             }
 
-            // loop cards in front
+            // loop cards in front of i card (Inside Loop)
             for(int n = j; n < 4; n++){
                 // check if next card is the continuation of a straight
-                if (((h.get(n).value + 1) == h.get(n + 1).value) && h.get(n + 1).value <= max_val) {
+                if (((h.get(n).value + 1) == h.get(n + 1).value) && h.get(n + 1).value <= max_val && !(j != i && first)) {
                     str_index.add(orig_hand.indexOf(h.get(n + 1)) + 1);
                     new_count++;
+                    if(h.get(n).value == 62 || h.get(n + 1).value == 62){
+                        // if there is an Ace in the straight wannabe, it will always be an inside straight
+                        in_straight = 1;
+                        out_straight = 0;
+                    }
 
                 // in this case we have a low Ace and it´s the first iteration
-                } else if (j != i && n == j) {
-                    if(h.get(n + 1).value == '2'){
-                        str_index.add(orig_hand.indexOf(h.get(n + 1)) + 1);
+                } else if (j != i && first) {
+                    if(h.get(n).value == '2'){
+                        str_index.add(orig_hand.indexOf(h.get(n)) + 1);
                         new_count++;
+                        // if there is an Ace in the straight wannabe, it will always be an inside straight
+                        in_straight = 1;
+                        out_straight = 0;
+                        n--;
                     }
 
                 // check if the next card is part of a possible straight
@@ -282,6 +301,7 @@ public class HandManager {
                     out_straight = 0;
                     str_index.add(orig_hand.indexOf(h.get(n + 1)) + 1);
                 }
+                first = false;
             }
 
             // if there isn´t a 3 or 4 to a straight we clear the list and
@@ -330,9 +350,12 @@ public class HandManager {
             
         }
 
+
+
         return str_index;
 
     }
+
     /**
      * Will tell you what cards to hold
      * 
@@ -381,7 +404,7 @@ public class HandManager {
         str_index = straight_count(orig_hand);
         fls_cnt = flush_count(orig_hand);
         
-
+ 
         // Value 2  <--
         /* 4 to Royal Flush */
         if(str_index.get(0) == 4) {
@@ -530,6 +553,7 @@ public class HandManager {
             for(i = 3; i < 7; i++){
                 hold.add(str_index.get(i));
             }
+            System.out.println("outside");
             return hold;
         }
 
@@ -547,25 +571,27 @@ public class HandManager {
         }
 
         // Value 14 <--
-        /* 3 to a Straight Flush (Type 1 - ) */
+        /* 3 to a Straight Flush (Type 1 - High cards exceed or equal Gaps) */
         if(str_index.get(0) == 3) {
             aux = 1;
             for(i = 3; i < 6; i++){
+                // checks if all wannabe straight cards have the flush suit
                 if(orig_hand.get(str_index.get(i) - 1).naipe != flush_naipe){
                     aux = 0;
                 }
+                
+                // count how many high cards there are in the wannabe straight
                 if(isHighCard(orig_hand.get(str_index.get(i) - 1))){
                     high_straight++;
                 }
             }
-            if(aux == 1){
-                for(i = 3; i < 7; i++){
+            if(aux == 1 && high_straight >= str_index.get(1)){
+                for(i = 3; i < 6; i++){
                     hold.add(str_index.get(i));
                 }
-            } else {
+                System.out.println("COCO");
                 return hold;
             }
-            
         }
 
         // Value 15
@@ -617,6 +643,30 @@ public class HandManager {
             return hold;
         }
 
+        // Value 20 <--
+        /* 3 to a Straight Flush (Type 2 - 1 gap || 2 gaps & 1 High || Ace-low || 234 suited) */
+        if(str_index.get(0) == 3) {
+            aux = 1;
+            for(i = 3; i < 6; i++){
+                // checks if all wannabe straight cards have the flush suit
+                if(orig_hand.get(str_index.get(i) - 1).naipe != flush_naipe){
+                    aux = 0;
+                }
+                
+                // count how many high cards there are in the wannabe straight
+                if(isHighCard(orig_hand.get(str_index.get(i) - 1))){
+                    high_straight++;
+                }
+            }
+            if(aux == 1 && high_straight >= str_index.get(1)){
+                for(i = 3; i < 6; i++){
+                    hold.add(str_index.get(i));
+                }
+                System.out.println("COCO");
+                return hold;
+            }
+        }
+
         // Value 21
         /* 4 to an inside Straight with 1 High Cards */
         if((str_index.get(0) == 4 && str_index.get(1) >= 1 && high_straight == 1)){
@@ -624,6 +674,7 @@ public class HandManager {
             for(i = 3; i < 7; i++){
                 hold.add(str_index.get(i));
             }
+            System.out.println("inside");
             return hold;
         }
 
