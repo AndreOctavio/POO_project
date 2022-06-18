@@ -9,7 +9,7 @@ public class SimulationMode extends Game {
     int numOfdeals, bet;
     public double sum_of_all_bets;
 
-    public SimulationMode (int m,int d, int b) {
+    public SimulationMode(int m, int d, int b) {
         super(m);
         deckOfcards.createDeck();
         excluded = new ArrayList<Integer>();
@@ -19,7 +19,7 @@ public class SimulationMode extends Game {
 
         sum_of_all_bets = numOfdeals * bet;
     }
-    
+
     public void deal() {
         int random_num;
         hands_count[10]++;
@@ -35,10 +35,9 @@ public class SimulationMode extends Game {
      * Replaces the cards that the player doesn't want.
      * 
      * @param h list with the index of the cards that player wants in his hand.
-     */ 
+     */
     public void doHold(List<Integer> h) {
         int random_num;
-
         for (int n = 1; n < 6; n++) {
             if (!deckOfcards.search(h, n)) { // check if n is in hold
                 random_num = deckOfcards.getRandom(excluded);

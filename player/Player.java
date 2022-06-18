@@ -59,6 +59,11 @@ public class Player {
         money -= q;
     }
 
+    /**
+     * Organises from lowest to highest value the cards order.
+     * 
+     * @param h cards given to the player
+     */
     public List<Card> organiseHand(List<Card> h) {
         List<Card> order = new ArrayList<Card>();
         List<Card> aux = new ArrayList<Card>();

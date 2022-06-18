@@ -78,7 +78,6 @@ public class DebugMode extends Game {
                 i++;
             } else if (commandsArray[i].equals("h")) { // command hold
                 int tmp;
-
                 for (n = 1; n < 6; n++) { // get the cards the player wants to hold
                     if (i + n == commandsArray.length) {
                         break;
@@ -90,6 +89,8 @@ public class DebugMode extends Game {
                     }
                     if (tmp < 1 || tmp > 5) {
                         illegal = 1;
+                        System.out.println("h: illegal command");
+                        System.exit(0);
                     }
                     hold.add(tmp); // add integers to hold
                 }
