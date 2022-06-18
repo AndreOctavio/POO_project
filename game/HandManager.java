@@ -462,7 +462,9 @@ public class HandManager {
         int aux = 0;
         int fls_cnt = 0;
         int high_straight = 0;
-        int highcards_counter = 0; // counter of High Cards in 3 to a Flush
+        int high_str_fls = 0;
+        int high_flush = 0; // counter of High Cards in 3 to a Flush
+        char aux_char = 0;
 
         List<Card> changed_hand = player.organiseHand(orig_hand);
 
@@ -521,7 +523,7 @@ public class HandManager {
 
         // Value 3 <--
         /* Three aces */
-        if ((id_hand == 3 || id_hand == 6) && changed_hand.get(2).value == 62) {
+        if ((id_hand == 3 || id_hand == 6 ) && changed_hand.get(2).value == 62) {
 
             /*
              * in the ordered hand, the middle card will always be part of the three of a
@@ -553,10 +555,7 @@ public class HandManager {
         /* Three of a kind */
         if (id_hand == 3) {
 
-            /*
-             * in the ordered hand, the middle card will always be part of the three of a
-             * kind
-             */
+            /* in the ordered hand, the middle card will always be part of the three of a kind */
             i = 1;
             for (Card temp : orig_hand) {
                 if (temp.value == changed_hand.get(2).value) {
@@ -576,14 +575,12 @@ public class HandManager {
                 for (i = 3; i < 7; i++) {
                     if (orig_hand.get(str_index.get(i) - 1).naipe != flush_naipe) {
                         aux = 0;
-                        hold.add(i + 1);
                     }
                 }
                 if (aux == 1) {
                     for (i = 3; i < 7; i++) {
                         hold.add(str_index.get(i));
                     }
-                } else {
                     return hold;
                 }
             }
@@ -681,24 +678,26 @@ public class HandManager {
             System.out.println("advice: AKQJ UNSUITED");
             return hold;
         }
+        
+        boolean str_fls_wannabe = true;
 
         // Value 14 <--
         /* 3 to a Straight Flush (Type 1 - High cards exceed or equal Gaps) */
-        if (str_index.get(0) == 3) {
-            aux = 1;
-            for (i = 3; i < 6; i++) {
+        if(str_index.get(0) == 3) {
+
+            for(i = 3; i < 6; i++){
                 // checks if all wannabe straight cards have the flush suit
-                if (orig_hand.get(str_index.get(i) - 1).naipe != flush_naipe) {
-                    aux = 0;
+                if(orig_hand.get(str_index.get(i) - 1).naipe != flush_naipe){
+                    str_fls_wannabe = false;
                 }
 
                 // count how many high cards there are in the wannabe straight
-                if (isHighCard(orig_hand.get(str_index.get(i) - 1))) {
-                    high_straight++;
+                if(isHighCard(orig_hand.get(str_index.get(i) - 1))){
+                    high_str_fls++;
                 }
             }
-            if (aux == 1 && high_straight >= str_index.get(1)) {
-                for (i = 3; i < 6; i++) {
+            if(str_fls_wannabe && high_str_fls >= str_index.get(1)){
+                for(i = 3; i < 6; i++){
                     hold.add(str_index.get(i));
                 }
                 System.out.println("advice: 3 to STRAIGHT FLUSH (type 1)");
@@ -741,16 +740,33 @@ public class HandManager {
                 if (orig_hand.get(i).naipe == flush_naipe) { // aux_hold saves the cards with the Flush's suit
                     hold.add(i + 1);
                     if (isHighCard(orig_hand.get(i))) { // checks if the card is a High Card
-                        highcards_counter++; // counter of High Cards in the hand
+                        high_flush++; // counter of High Cards in the hand
                     }
                 }
             }
 
-            if (highcards_counter != 2) { // no 2 High Cards were detected
+            if (high_flush != 2) { // no 2 High Cards were detected
                 hold.removeAll(hold); // the player doesn't hold any card
             } else {
                 System.out.println("advice: 3 TO A FLUSH WITH 2 HIGH CARDS");
                 return hold; // the player holds the Flush cards
+            }
+        }
+
+        // Value 18
+        /*2 suited high cards */
+        for (i = 4; i >= 0; i--) {
+            if ((isHighCard(changed_hand.get(i)) && isHighCard(changed_hand.get(i - 1))) && ((changed_hand.get(i).naipe == changed_hand.get(i - 1).naipe))) {
+                Values [2] = changed_hand.get(i).value;
+                Values [1] = changed_hand.get(i - 1).value;
+                for (i = 0; i <= 4; i++) {
+                    for(int j = Values [0]; j > 0; j--) {
+                        if (orig_hand.get(i).value == Values[j]) {
+                            hold.add(i + 1);
+                        }
+                    }
+                }
+                return hold;
             }
         }
 
@@ -766,25 +782,32 @@ public class HandManager {
         }
 
         // Value 20 <--
-        /*
-         * 3 to a Straight Flush (Type 2 - 1 gap || 2 gaps & 1 High || Ace-low || 234
-         * suited)
-         */
-        if (str_index.get(0) == 3) {
-            aux = 1;
-            for (i = 3; i < 6; i++) {
-                // checks if all wannabe straight cards have the flush suit
-                if (orig_hand.get(str_index.get(i) - 1).naipe != flush_naipe) {
-                    aux = 0;
-                }
+        /* 3 to a Straight Flush (Type 2 - 1 gap || 2 gaps & 1 High || Ace-low || 234 suited) */
+        if(str_index.get(0) == 3 && str_fls_wannabe) {
 
-                // count how many high cards there are in the wannabe straight
-                if (isHighCard(orig_hand.get(str_index.get(i) - 1))) {
-                    high_straight++;
+            // 234 suited
+            Values[0] = 3;
+            Values[1] = 50;
+            Values[2] = 51;
+            Values[3] = 52;
+            hold = CheckSuit(changed_hand, orig_hand, Values, "Suited");
+            if(hold.size() != 0) {
+                return hold;
+            }
+
+            // if ace-low, we will have 3 numbers of: {A, 2, 3, 4, 5}
+            aux = 0;
+            for (i = 3; i < 7; i++) {
+                aux_char = orig_hand.get(str_index.get(i) - 1).value;
+                if (aux_char == 62 || aux_char == 50 || aux_char == 51 || aux_char == 52 || aux_char == 53) {
+                    aux++;
                 }
             }
-            if (aux == 1 && high_straight >= str_index.get(1)) {
-                for (i = 3; i < 6; i++) {
+
+            // 1 gap || 2 gaps & 1 High || ace-low
+            if((str_index.get(1) == 1) || (str_index.get(1) == 2 && high_str_fls == 1) || (aux == 3)){
+                
+                for(i = 3; i < 6; i++){
                     hold.add(str_index.get(i));
                 }
                 System.out.println("advice: TYPE 2(???)");
@@ -806,6 +829,8 @@ public class HandManager {
         // Value 22
         /* KQJ unsuited */
         Values[0] = 3;
+        Values[1] = 59;
+        Values[2] = 60;
         hold = CheckSuit(changed_hand, orig_hand, Values, "Unsuited");
         if (hold.size() != 0) {
             System.out.println("advice: KQJ UNSUITED");
@@ -837,7 +862,7 @@ public class HandManager {
         /* 3 to a Flush with 1 high card */
         if (fls_cnt == 3) {
 
-            if (highcards_counter != 1) { // no High Card was detected
+            if (high_flush != 1) { // no High Card was detected
                 hold.removeAll(hold); // the player doesn't hold any card
             } else {
                 System.out.println("advice: 3 TO A FLUSH WITH 1 HIGH CARD");
@@ -918,7 +943,7 @@ public class HandManager {
         /* 3 to a Flush with 0 high cards */
         if (fls_cnt == 3) {
 
-            if (highcards_counter != 0) { // no High Card was detected
+            if (high_flush != 0) { // no High Card was detected
                 hold.removeAll(hold); // the player doesn't hold any card
             } else {
                 System.out.println("advice: 3 TO A FLUSH WITH NO HIGH CARDS");
