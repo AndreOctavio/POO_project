@@ -222,6 +222,56 @@ public class HandManager {
         }
         return false;
     }
+    
+    /**
+     * Checks if cards in h have values given in the charArray value
+     * and tests to see if they are suited or unsuited.
+     * 
+     * @param h hand.
+     * @param value values of the cards we are looking for.
+     * @param aux Suited/Unsuited.
+     * @return List of integers (hold).
+     */
+    public List<Integer> CheckSuit(List<Card> organised_h, List<Card> true_h, int[] value, String aux) {
+
+        // value -> [num of cards, [values]] 4, j, q, k, a
+        int cont = value[0], diffCards = 0, i, j;
+        char tmp_naipe = 'n'; //null
+
+        List<Integer> indexOf = new ArrayList<Integer>();
+
+        for (i = 4; i >= 0; i--) {
+            // if value of card is equal to value we are looking for
+            // cont only decrement if we find the value we are looking for
+            if (organised_h.get(i).value == value[cont]) {
+                if (tmp_naipe != 'n' && organised_h.get(i).naipe != tmp_naipe) {
+                    if (aux.equals("Suited")) {
+                        return indexOf;
+                    }
+                    diffCards++;
+                }
+                tmp_naipe = organised_h.get(i).naipe;
+                if (cont > 0) {
+                    cont--;
+                }
+            }
+        }
+        if (cont == 0) {
+            if (aux.equals("Suited") ^ diffCards > 0) {
+                for (i = 0; i <= 4; i++) {
+                    for(j = value [0]; j > 0; j--) {
+                        if (true_h.get(i).value == value[j]) {
+                            indexOf.add(i + 1);
+                        }
+                    }
+                }
+                return indexOf;
+            }
+        } 
+
+        return indexOf;
+    }
+    
 
     public List<Integer> straight_count(List<Card> orig_hand) {
         
@@ -350,6 +400,8 @@ public class HandManager {
         List<Card> changed_hand = player.organiseHand(orig_hand);
 
         List<Integer> str_index = new ArrayList<Integer>();
+
+        int []Values = {4, 59, 60, 61, 62}; //index 0 is the number of positions i need to go in CheckSuit
 
         int  id_hand = identifyHand(changed_hand, 0);
 
@@ -507,7 +559,6 @@ public class HandManager {
 
         // Value 10  <--
         /* 3 to Royal Flush */
-
         if(str_index.get(0) == 3) {
             if(fls_cnt >= 3){
                 for(i = 0; i < 5; i++){
@@ -526,12 +577,12 @@ public class HandManager {
 
         // Value 11 <--
         // 4 to an Outside Straight
-        if((str_index.get(0) == 4 && str_index.get(2) == 1)){
+        /*if((str_index.get(0) == 4 && str_index.get(2) == 1)){
             for(i = 3; i < 7; i++){
                 hold.add(str_index.get(i));
             }
             return hold;
-        }
+        }*/
 
         // Value 12 <--
         /* Low Pair */
@@ -546,9 +597,16 @@ public class HandManager {
             return hold;
         }
 
+        //value 13
+        /*AKQJ unsuited */
+        hold = CheckSuit(changed_hand, orig_hand, Values, "Unsuited");
+        if (hold.size() != 0) {
+            return hold;
+        }
+        
         // Value 14 <--
         /* 3 to a Straight Flush (Type 1 - ) */
-        if(str_index.get(0) == 3) {
+        /*if(str_index.get(0) == 3) {
             aux = 1;
             for(i = 3; i < 6; i++){
                 if(orig_hand.get(str_index.get(i) - 1).naipe != flush_naipe){
@@ -566,7 +624,8 @@ public class HandManager {
                 return hold;
             }
             
-        }
+        }*/
+        
 
         // Value 15
         /* 4 to an inside Straight with 3 High Cards */
@@ -583,6 +642,14 @@ public class HandManager {
             } else {
                 return hold;
             }
+        }
+
+        //Value 16 
+        /*QJ suited*/
+        Values[0] = 2;
+        hold = CheckSuit(changed_hand, orig_hand, Values, "Suited");
+        if (hold.size() != 0) {
+            return hold;
         }
 
         // Value 17
@@ -627,6 +694,34 @@ public class HandManager {
             return hold;
         }
 
+        // Value 22
+        /*KQJ unsuited*/
+        Values[0] = 3;
+        hold = CheckSuit(changed_hand, orig_hand, Values, "Unsuited");
+        if (hold.size() != 0) {
+            return hold;
+        }
+
+        // Value 23
+        /*JT suited */
+        Values[0] = 2;
+        Values[1] = 58;
+        Values[2] = 59;
+        hold = CheckSuit(changed_hand, orig_hand, Values, "Suited");
+        if (hold.size() != 0) {
+            return hold;
+        }
+
+        // Value 24
+        /*QJ unsuited */
+        Values[1] = 59;
+        Values[2] = 60;
+        hold = CheckSuit(changed_hand, orig_hand, Values, "Unsuited");
+        if (hold.size() != 0) {
+            return hold;
+        }
+
+
         // Value 25
         /* 3 to a Flush with 1 high cards */
         if (fls_cnt == 3) {
@@ -647,6 +742,39 @@ public class HandManager {
             } else {
                 return hold; // the player holds the Flush cards
             }
+        }
+
+        // Value 26
+        /*QT suited */
+        Values[1] = 58;
+        Values[2] = 60;
+        hold = CheckSuit(changed_hand, orig_hand, Values, "Suited");
+        if (hold.size() != 0) {
+            return hold;
+        }
+
+        // Value 28
+        /*KQ, KJ unsuited */
+        Values[1] = 60;
+        Values[2] = 61;
+        hold = CheckSuit(changed_hand, orig_hand, Values, "Unsuited");
+        if (hold.size() != 0) {
+            return hold;
+        }
+
+        Values[1] = 59;
+        Values[2] = 61;
+        hold = CheckSuit(changed_hand, orig_hand, Values, "Unsuited");
+        if (hold.size() != 0) {
+            return hold;
+        }
+
+        // Value 30
+        /*KT suited */
+        Values[1] = 58;
+        hold = CheckSuit(changed_hand, orig_hand, Values, "Suited");
+        if (hold.size() != 0) {
+            return hold;
         }
 
         // Value 32
