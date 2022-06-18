@@ -885,17 +885,8 @@ public class HandManager {
         }
 
         // Value 33
-        /* 3 to a Flush with 1 high cards */
+        /* 3 to a Flush with 0 high cards */
         if (fls_cnt == 3) {
-
-            for (i = 0; i < 5; i++) {
-                if (orig_hand.get(i).naipe == flush_naipe) { // aux_hold saves the cards with the Flush's suit
-                    hold.add(i + 1);
-                    if (isHighCard(orig_hand.get(i))) { // checks if the card is a High Card
-                        highcards_counter++; // counter of High Cards in the hand
-                    }
-                }
-            }
 
             if (highcards_counter != 0) { // no High Card was detected
                 hold.removeAll(hold); // the player doesn't hold any card
