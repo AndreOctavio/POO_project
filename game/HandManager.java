@@ -647,7 +647,6 @@ public class HandManager {
             for (i = 3; i < 7; i++) {
                 hold.add(str_index.get(i));
             }
-            System.out.println("outside");
             return hold;
         }
 
@@ -690,7 +689,6 @@ public class HandManager {
                 for(i = 3; i < 6; i++){
                     hold.add(str_index.get(i));
                 }
-                System.out.println("COCO");
                 return hold;
             }
         }
@@ -771,7 +769,6 @@ public class HandManager {
                 for(i = 3; i < 6; i++){
                     hold.add(str_index.get(i));
                 }
-                System.out.println("COCO");
                 return hold;
             }
         }
@@ -783,7 +780,6 @@ public class HandManager {
             for (i = 3; i < 7; i++) {
                 hold.add(str_index.get(i));
             }
-            System.out.println("inside");
             return hold;
         }
 
