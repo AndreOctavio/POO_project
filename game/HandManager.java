@@ -518,22 +518,20 @@ public class HandManager {
 
         // Value 3 <--
         /* Three aces */
-        if (id_hand == 3) {
+        if ((id_hand == 3 || id_hand == 6 ) && changed_hand.get(2).value == 62) {
 
             /*
              * in the ordered hand, the middle card will always be part of the three of a
              * kind
              */
-            if (changed_hand.get(2).value == 62) {
-                i = 1;
-                for (Card temp : orig_hand) {
-                    if (temp.value == 62) {
-                        hold.add(i);
-                    }
-                    i++;
+            i = 1;
+            for (Card temp : orig_hand) {
+                if (temp.value == 62) {
+                    hold.add(i);
                 }
-                return hold;
+                i++;
             }
+            return hold;
         }
 
         // Value 4
@@ -740,6 +738,23 @@ public class HandManager {
             }
         }
 
+        // Value 18
+        /*2 suited high cards */
+        for (i = 4; i >= 0; i--) {
+            if ((isHighCard(changed_hand.get(i)) && isHighCard(changed_hand.get(i - 1))) && ((changed_hand.get(i).naipe == changed_hand.get(i - 1).naipe))) {
+                Values [2] = changed_hand.get(i).value;
+                Values [1] = changed_hand.get(i - 1).value;
+                for (i = 0; i <= 4; i++) {
+                    for(int j = Values [0]; j > 0; j--) {
+                        if (orig_hand.get(i).value == Values[j]) {
+                            hold.add(i + 1);
+                        }
+                    }
+                }
+                return hold;
+            }
+        }
+
         // Value 19
         /* 4 to an inside Straight with 2 High Cards */
         if ((str_index.get(0) == 4 && str_index.get(1) >= 1 && high_straight == 2)) {
@@ -786,6 +801,8 @@ public class HandManager {
         // Value 22
         /*KQJ unsuited*/
         Values[0] = 3;
+        Values[1] = 59;
+        Values[2] = 60;
         hold = CheckSuit(changed_hand, orig_hand, Values, "Unsuited");
         if (hold.size() != 0) {
             return hold;
