@@ -38,7 +38,6 @@ public class Card {
                     System.exit(0);
                 }
         }
-
         naipe = n;
     }
 

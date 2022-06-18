@@ -71,16 +71,12 @@ public class HandManager {
                     cont[cont[0] - 1]++; // increment counters
                     cont[0] = 1; // reset card counter
                     equal_cards[cont[1]] = h.get(i).value;
-                    // if we have a four of a kind, save its suit
-                    if (cont[0] == 4) {
-                        equal_cards[3] = h.get(i).value;
-                    }
-
                 }
-
+            }
+            if (cont [0] == 2) { //pair in the position 4 and 5
+                equal_cards[cont[1]] = h.get(3).value;
             }
             cont[cont[0] - 1]++;
-            equal_cards[cont[1]] = h.get(4).value;
             if (cont[1] == 1 && cont[2] == 1) { // Full House
                 player.gain(b * 10);
                 return 6;
