@@ -60,20 +60,20 @@ abstract class Game {
      * @param N13 "theoretical returned"
      */
     public void statistics(double N13) {
-        System.out.println("Hand                Nb");
-        System.out.println("______________________");
-        System.out.println("Jacks or Better " + hands_count[0]);
-        System.out.println("Two Pair " + hands_count[1]);
-        System.out.println("Three of a kind " + hands_count[2]);
-        System.out.println("Straight " + hands_count[3]);
-        System.out.println("Flush " + hands_count[4]);
-        System.out.println("Full House " + hands_count[5]);
-        System.out.println("Four of a Kind " + hands_count[6]);
-        System.out.println("Straight Flush " + hands_count[7]);
-        System.out.println("Royal Flush " + hands_count[8]);
-        System.out.println("Other " + hands_count[9]);
-        System.out.println("______________________");
-        System.out.println("Total " + hands_count[10]);
-        System.out.println("Credit " + player.money + " (" + N13 + "%)");
+        // System.out.println("Hand Nb");
+        // System.out.println("______________________");
+        // System.out.println("Jacks or Better " + hands_count[0]);
+        // System.out.println("Two Pair " + hands_count[1]);
+        // System.out.println("Three of a kind " + hands_count[2]);
+        // System.out.println("Straight " + hands_count[3]);
+        // System.out.println("Flush " + hands_count[4]);
+        // System.out.println("Full House " + hands_count[5]);
+        // System.out.println("Four of a Kind " + hands_count[6]);
+        // System.out.println("Straight Flush " + hands_count[7]);
+        // System.out.println("Royal Flush " + hands_count[8]);
+        // System.out.println("Other " + hands_count[9]);
+        // System.out.println("______________________");
+        // System.out.println("Total " + hands_count[10]);
+        // System.out.println("Credit " + player.money + " (" + N13 + "%)");
     }
 }
