@@ -454,12 +454,13 @@ public class HandManager {
      * @return list of integers with the indexes of the cards the player must hold
      */
     public List<Integer> advice(List<Card> orig_hand) {
-
+        
         List<Integer> hold = new ArrayList<Integer>();
         int i = 0;
         int aux = 0;
         int fls_cnt = 0;
         int high_straight = 0;
+        int highcards_counter = 0; // counter of High Cards in 3 to a Flush
 
         List<Card> changed_hand = player.organiseHand(orig_hand);
 
@@ -722,7 +723,6 @@ public class HandManager {
         /* 3 to a Flush with 2 high cards */
         if (fls_cnt == 3) {
 
-            int highcards_counter = 0; // counter of High Cards in 3 to a Flush
 
             for (i = 0; i < 5; i++) {
                 if (orig_hand.get(i).naipe == flush_naipe) { // aux_hold saves the cards with the Flush's suit
@@ -815,17 +815,6 @@ public class HandManager {
         /* 3 to a Flush with 1 high cards */
         if (fls_cnt == 3) {
 
-            int highcards_counter = 0; // counter of High Cards in 3 to a Flush
-
-            for (i = 0; i < 5; i++) {
-                if (orig_hand.get(i).naipe == flush_naipe) { // aux_hold saves the cards with the Flush's suit
-                    hold.add(i + 1);
-                    if (isHighCard(orig_hand.get(i))) { // checks if the card is a High Card
-                        highcards_counter++; // counter of High Cards in the hand
-                    }
-                }
-            }
-
             if (highcards_counter != 1) { // no High Card was detected
                 hold.removeAll(hold); // the player doesn't hold any card
             } else {
@@ -898,7 +887,6 @@ public class HandManager {
         // Value 33
         /* 3 to a Flush with 1 high cards */
         if (fls_cnt == 3) {
-            int highcards_counter = 0; // counter of High Cards in 3 to a Flush
 
             for (i = 0; i < 5; i++) {
                 if (orig_hand.get(i).naipe == flush_naipe) { // aux_hold saves the cards with the Flush's suit
