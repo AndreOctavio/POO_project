@@ -23,24 +23,6 @@ public class Player {
     }
 
     /**
-     * Adds a card c to the array hand.
-     * 
-     * @param c card
-     */
-    public void addCard(Card c) {
-        hand.add(c);
-    }
-
-    /**
-     * Removes a card c from the array hand.
-     * 
-     * @param c card
-     */
-    public void removeCard(Card c) {
-        hand.remove(c);
-    }
-
-    /**
      * Adds money q to the player.
      * 
      * @param q money
@@ -60,34 +42,40 @@ public class Player {
     }
 
     /**
-     * Organises from lowest to highest value the cards order.
+     * Organises the cards order by value from the lowest to the highest.
      * 
+<<<<<<< HEAD
      * @param h cards given to the player
+     * @return order organised array
+=======
+     * @param h (unorganised) cards given to the player
+>>>>>>> fb63e672be163fbf64dc06d2c69189bd2eef94db
      */
     public List<Card> organiseHand(List<Card> h) {
-        List<Card> order = new ArrayList<Card>();
-        List<Card> aux = new ArrayList<Card>();
 
-        char[] hand = new char[5];
+        List<Card> order = new ArrayList<Card>(); //were we keep the organised cards.
+        List<Card> aux = new ArrayList<Card>(); //aux hand, we remove cards from here 
+                                                //to not mess with the players real hand.
+        char[] hand = new char[5]; //we use this char array to organise the values.
         int n = 0, i = 0;
 
-        for (Card tmp : h) {
+        for (Card tmp : h) { //add tmp to aux and the tmp.value to hand
             aux.add(tmp);
             hand[n] = tmp.value;
             n++;
         }
 
         n = 0;
-        Arrays.sort(hand);
+        Arrays.sort(hand); //sort the values
 
-        while (n < 5) {
-            while (hand[n] != aux.get(i).value) {
+        while (n < 5) { //go through each value in hand
+            while (hand[n] != aux.get(i).value) { //look for the value in aux
                 i++;
             }
-            order.add(aux.get(i));
-            aux.remove(aux.get(i));
+            order.add(aux.get(i)); //add the card to order
+            aux.remove(aux.get(i)); //remove the card from aux, we do this because there could be repeated values
             n++;
-            i = 0;
+            i = 0; //reset i;
         }
 
         return order;

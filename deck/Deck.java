@@ -9,7 +9,7 @@ public class Deck {
     public List<Card> deck;
 
     /**
-     * Constructs the Deck.
+     * Creates an empty deck.
      */
     public Deck() {
         deck = new ArrayList<Card>();

@@ -2,7 +2,6 @@ package deck;
 
 public class Card {
 
-    /* Put verifications for card */
     public char value;
     public char suit;
 
@@ -14,7 +13,8 @@ public class Card {
      */
     public Card(char v, char n) {
 
-        switch (v) {
+        switch (v) { //if it's a A, K, Q, J or T we change their values to the values of the ASCII table.
+                     //So the value 9 is 57 in the ASCII table, so T will be 58 and so on.
             case 84:
                 value = 58;
                 break;
@@ -31,40 +31,49 @@ public class Card {
                 value = 62;
                 break;
             default:
-                if (v > 49 && v < 63) {
-                    value = v;
+                if (v > 49 && v < 63) { //v < 63 in this condition because in simulation mode 
+                    value = v;          //our deck has the values that we want already
                 } else {
                     System.out.println("Invalid card in card-file, please use a valid file.");
                     System.exit(0);
                 }
         }
 
-        suit = n;
+        if (n == 'D' || n == 'C' || n == 'H' || n == 'S') { //check if the card has a valid suit
+            suit = n;
+        } else {
+            System.out.println("Invalid card in card-file, please use a valid file.");
+            System.exit(0);
+        }
     }
 
     /**
      * Reverses changes made to card a in the constructor.
      * 
      * @param a card
-     * @return normal card
+     * @return a normal card
      */
     public Card reverse(Card a) {
 
-        Card tmp = new Card(a.value, a.suit);
-
-        if (a.value == 58) {
-            tmp.value = 84;
-        } else if (a.value == 59) {
-            tmp.value = 74;
-        } else if (a.value == 60) {
-            tmp.value = 81;
-        } else if (a.value == 61) {
-            tmp.value = 75;
-        } else if (a.value == 62) {
-            tmp.value = 65;
+        switch (a.value) {
+            case 58:
+                a.value = 84;
+                break;
+            case 59:
+                a.value = 74;
+                break;
+            case 60:
+                a.value = 81;
+                break;
+            case 61:
+                a.value = 75;
+                break;
+            case 62:
+                a.value = 65;
+                break;
         }
 
-        return tmp;
+        return a;
     }
 
     public String toString() {
