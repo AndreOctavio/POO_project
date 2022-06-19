@@ -39,12 +39,16 @@ public class Card {
                 }
         }
 
+<<<<<<< HEAD
         if (n == 'D' || n == 'C' || n == 'H' || n == 'S') { //check if the card has a valid suit
             suit = n;
         } else {
             System.out.println("Invalid card in card-file, please use a valid file.");
             System.exit(0);
         }
+=======
+        suit = n;
+>>>>>>> fb63e672be163fbf64dc06d2c69189bd2eef94db
     }
 
     /**
@@ -55,6 +59,7 @@ public class Card {
      */
     public Card reverse(Card a) {
 
+<<<<<<< HEAD
         switch (a.value) {
             case 58:
                 a.value = 84;
@@ -71,6 +76,20 @@ public class Card {
             case 62:
                 a.value = 65;
                 break;
+=======
+        Card tmp = new Card(a.value, a.suit);
+
+        if (a.value == 58) {
+            tmp.value = 84;
+        } else if (a.value == 59) {
+            tmp.value = 74;
+        } else if (a.value == 60) {
+            tmp.value = 81;
+        } else if (a.value == 61) {
+            tmp.value = 75;
+        } else if (a.value == 62) {
+            tmp.value = 65;
+>>>>>>> fb63e672be163fbf64dc06d2c69189bd2eef94db
         }
 
         return a;

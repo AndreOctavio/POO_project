@@ -9,8 +9,15 @@ public class SimulationMode extends Game {
     int numOfdeals, bet;
     public double sum_of_all_bets;
 
+    /**
+     * Initialisation of objects in Simulation Mode
+     * 
+     * @param m credit
+     * @param d nbdeals
+     * @param b bet
+     */
     public SimulationMode(int m, int d, int b) {
-        super(m);
+        super(m); // call of Game constructor (Inheritance)
         deckOfcards.createDeck();
         excluded = new ArrayList<Integer>();
 
@@ -20,6 +27,11 @@ public class SimulationMode extends Game {
         sum_of_all_bets = numOfdeals * bet;
     }
 
+    /**
+     * 
+     * Gives the player random cards from deck (shuffle)
+     * 
+     */
     public void deal() {
         int random_num;
         hands_count[10]++;

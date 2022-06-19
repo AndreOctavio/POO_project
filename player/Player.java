@@ -42,10 +42,14 @@ public class Player {
     }
 
     /**
-     * Organises from lowest to highest value the cards order.
+     * Organises the cards order by value from the lowest to the highest.
      * 
+<<<<<<< HEAD
      * @param h cards given to the player
      * @return order organised array
+=======
+     * @param h (unorganised) cards given to the player
+>>>>>>> fb63e672be163fbf64dc06d2c69189bd2eef94db
      */
     public List<Card> organiseHand(List<Card> h) {
 

@@ -182,7 +182,8 @@ public class DebugMode extends Game {
     }
 
     /**
-     * prints the final result of the play and the player's credit.
+     * prints the final result of the play, the player's credit and counts how many
+     * times the player wins with a certain hand.
      * 
      * @param name_hand integer which identifies the hand of cards the player owns
      */
