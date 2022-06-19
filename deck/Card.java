@@ -4,13 +4,13 @@ public class Card {
 
     /* Put verifications for card */
     public char value;
-    public char naipe;
+    public char suit;
 
     /**
-     * Constructs a Card with value v and naipe n.
+     * Constructs a Card with value v and suit n.
      * 
      * @param v value
-     * @param n naipe
+     * @param n suit
      */
     public Card(char v, char n) {
 
@@ -39,7 +39,7 @@ public class Card {
                 }
         }
 
-        naipe = n;
+        suit = n;
     }
 
     /**
@@ -50,7 +50,7 @@ public class Card {
      */
     public Card reverse(Card a) {
 
-        Card tmp = new Card(a.value, a.naipe);
+        Card tmp = new Card(a.value, a.suit);
 
         if (a.value == 58) {
             tmp.value = 84;
@@ -68,6 +68,6 @@ public class Card {
     }
 
     public String toString() {
-        return String.valueOf(this.value) + String.valueOf(this.naipe);
+        return String.valueOf(this.value) + String.valueOf(this.suit);
     }
 }

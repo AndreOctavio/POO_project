@@ -4,8 +4,8 @@ import game.DebugMode;
 import game.SimulationMode;
 
 import java.util.Scanner;
-import java.io.File; // Import the File class
-import java.io.FileNotFoundException; // Import this class to handle errors
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class Main {
     public static void main(String[] args) {
@@ -121,6 +121,9 @@ public class Main {
 
             sm.statistics((sm.player.sum_of_all_gains / sm.sum_of_all_bets) * 100);
 
+        } else { // wrong mode call
+            System.out.println("error: invalid mode call");
+            System.exit(0);
         }
     }
 }

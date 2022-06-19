@@ -60,9 +60,9 @@ public class Player {
     }
 
     /**
-     * Organises from lowest to highest value the cards order.
+     * Organises the cards order by value from the lowest to the highest.
      * 
-     * @param h cards given to the player
+     * @param h (unorganised) cards given to the player
      */
     public List<Card> organiseHand(List<Card> h) {
         List<Card> order = new ArrayList<Card>();
