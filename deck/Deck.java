@@ -19,12 +19,12 @@ public class Deck {
      * Creates all the cards for the deck.
      */
     public void createDeck() {
-        char[] naipes = { 'S', 'C', 'H', 'D' };
+        char[] suits = { 'S', 'C', 'H', 'D' };
         int i = 0;
 
         while (i < 4) {
             for (char n = 50; n < 63; n++) {
-                Card c = new Card(n, naipes[i]);
+                Card c = new Card(n, suits[i]);
                 deck.add(c);
             }
             i++;
