@@ -1,7 +1,9 @@
-package game;
+package src.game;
 
-import deck.Card;
 import java.util.List;
+
+import src.deck.Card;
+
 import java.util.Collections;
 
 public class DebugMode extends Game {

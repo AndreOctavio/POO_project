@@ -1,10 +1,10 @@
-package game;
-
-import deck.Card;
-import player.Player;
+package src.game;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import src.deck.Card;
+import src.player.Player;
 
 public class HandManager {
 

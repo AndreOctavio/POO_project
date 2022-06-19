@@ -1,9 +1,10 @@
-package main;
-
-import game.DebugMode;
-import game.SimulationMode;
+package src.main;
 
 import java.util.Scanner;
+
+import src.game.DebugMode;
+import src.game.SimulationMode;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 

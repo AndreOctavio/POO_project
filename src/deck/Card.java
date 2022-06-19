@@ -1,4 +1,4 @@
-package deck;
+package src.deck;
 
 public class Card {
 

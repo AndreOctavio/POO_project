@@ -1,8 +1,10 @@
-package player;
+package src.player;
 
-import deck.Card;
 import java.util.ArrayList;
 import java.util.List;
+
+import src.deck.Card;
+
 import java.util.Arrays;
 
 public class Player {

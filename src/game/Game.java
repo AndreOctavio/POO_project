@@ -1,10 +1,10 @@
-package game;
-
-import player.Player;
-import deck.Deck;
+package src.game;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import src.deck.Deck;
+import src.player.Player;
 
 abstract class Game {
 

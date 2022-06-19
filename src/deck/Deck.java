@@ -1,4 +1,4 @@
-package deck;
+package src.deck;
 
 import java.util.ArrayList;
 import java.util.List;
