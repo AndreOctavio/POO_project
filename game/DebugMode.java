@@ -32,9 +32,11 @@ public class DebugMode extends Game {
         String[] commandsArray = c.split(" "); // commandsArray has all the strings from cmd-file
         int i = 0, n, bet = 0, p_bet = 5, deal = -1, illegal = 0;
         double sum_of_all_bets = 0;
-
+        int count = 1;
         while (i < commandsArray.length) {
             if (commandsArray[i].equals("b")) { // command bet
+                System.out.println("-"+count+"-");
+                count++; //DELETE THIS SHIT
                 if (i + 1 != commandsArray.length) {
                     try {
                         bet = Integer.parseInt(commandsArray[i + 1]); // convert the string next to b into an int

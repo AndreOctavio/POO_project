@@ -11,6 +11,7 @@ public class HandManager {
     protected int[] equal_cards = new int[5];
     protected int low_pair;
     protected char flush_suit;
+    private int type;
     Player player;
 
     HandManager(Player p) {
@@ -73,16 +74,12 @@ public class HandManager {
                     cont[cont[0] - 1]++; // increment counters
                     cont[0] = 1; // reset card counter
                     equal_cards[cont[1]] = h.get(i).value;
-                    // if we have a four of a kind, save its suit
-                    if (cont[0] == 4) {
-                        equal_cards[3] = h.get(i).value;
-                    }
-
                 }
-
+            }
+            if (cont[0] == 2) { // pair in the position 4 and 5
+                equal_cards[cont[1]] = h.get(3).value;
             }
             cont[cont[0] - 1]++;
-            equal_cards[cont[1]] = h.get(4).value;
             if (cont[1] == 1 && cont[2] == 1) { // Full House
                 player.gain(b * 10);
                 return 6;
@@ -460,7 +457,7 @@ public class HandManager {
 
         List<Integer> hold = new ArrayList<Integer>();
         int i = 0;
-        int aux = 0;
+        int aux = 0, j = 0;
         int fls_cnt = 0;
         int high_straight = 0; // counter of High Cards in Inside Straights
         int high_str_fls = 0; // counter of High Cards in Straight Flushes
@@ -766,8 +763,8 @@ public class HandManager {
                 Values[2] = changed_hand.get(i).value;
                 Values[1] = changed_hand.get(i - 1).value;
                 for (i = 0; i <= 4; i++) {
-                    for (int j = Values[0]; j > 0; j--) {
-                        if (orig_hand.get(i).value == Values[j]) {
+                    for (int a = Values[0]; a > 0; a--) {
+                        if (orig_hand.get(i).value == Values[a]) {
                             hold.add(i + 1);
                         }
                     }
@@ -806,10 +803,14 @@ public class HandManager {
                 return hold;
             }
 
-            // if ace-low, we will have 3 numbers of: {A, 2, 3, 4, 5}
+            // if ace-low, we will have 1 Ace and 2 numbers of: {2, 3, 4, 5}
             aux = 0;
+            j = 0;
             for (i = 3; i < 7; i++) {
                 aux_char = orig_hand.get(new_straight.get(i) - 1).value;
+                if (aux_char == 62) {
+                    j++;
+                }
                 if (aux_char == 62 || aux_char == 50 || aux_char == 51 || aux_char == 52 || aux_char == 53) {
                     aux++;
                 }
@@ -908,15 +909,6 @@ public class HandManager {
             return hold;
         }
 
-        // Value 30
-        /* KT suited */
-        Values[1] = 58;
-        hold = CheckSuit(changed_hand, orig_hand, Values, "Suited");
-        if (hold.size() != 0) {
-            System.out.println("advice: KT SUITED");
-            return hold;
-        }
-
         // Value 29
         /* Ace */
         index_values = hand_values(orig_hand, 0);
@@ -925,6 +917,14 @@ public class HandManager {
                 hold.add(index_values.get(i) + 1); // hold of the cards
             }
             System.out.println("advice: ACE");
+            return hold;
+        }
+
+        // Value 30
+        /* KT suited */
+        Values[1] = 58;
+        hold = CheckSuit(changed_hand, orig_hand, Values, "Suited");
+        if (hold.size() != 0) {
             return hold;
         }
 
