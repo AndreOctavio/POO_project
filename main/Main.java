@@ -68,10 +68,10 @@ public class Main {
 
             SimulationMode sm = new SimulationMode(credit, nbdeals, bet);
 
-            for (int i = nbdeals; i > 0; i--) {
+            for (int i = nbdeals; i > 0; i--) { //loop with all the plays we need to do
                 sm.bet(bet);
                 sm.deal();
-                sm.hold = sm.MasterKey.advice(sm.player.hand);
+                sm.hold = sm.MasterKey.advice(sm.player.hand); //use the hold returned by advice to make the correct play
                 sm.doHold(sm.hold);
 
                 switch (sm.MasterKey.identifyHand(sm.player.hand, bet)) {
@@ -111,12 +111,11 @@ public class Main {
                     default:
                         sm.hands_count[9]++;
                         break;
-
                 }
 
-                sm.player.hand.removeAll(sm.player.hand);
-                sm.hold.removeAll(sm.hold);
-                sm.excluded.removeAll(sm.excluded);
+                sm.player.hand.removeAll(sm.player.hand); //reset player.hand
+                sm.hold.removeAll(sm.hold); //reset hold
+                sm.excluded.removeAll(sm.excluded); //reset excluded
             }
 
             sm.statistics((sm.player.sum_of_all_gains / sm.sum_of_all_bets) * 100);
