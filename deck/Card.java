@@ -55,25 +55,27 @@ public class Card {
      */
     public Card reverse(Card a) {
 
+        Card tmp = new Card(a.value, a.suit);
+
         switch (a.value) {
             case 58:
-                a.value = 84;
+                tmp.value = 84;
                 break;
             case 59:
-                a.value = 74;
+                tmp.value = 74;
                 break;
             case 60:
-                a.value = 81;
+                tmp.value = 81;
                 break;
             case 61:
-                a.value = 75;
+                tmp.value = 75;
                 break;
             case 62:
-                a.value = 65;
+                tmp.value = 65;
                 break;
         }
 
-        return a;
+        return tmp;
     }
 
     public String toString() {
