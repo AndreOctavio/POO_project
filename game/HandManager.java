@@ -474,7 +474,7 @@ public class HandManager {
      * @param orig_hand player's hand
      * @return list of integers with the indexes of the cards the player must hold
      */
-    public List<Integer> advice(List<Card> orig_hand) {
+    public List<Integer> advice (List<Card> orig_hand) {
 
         List<Integer> hold = new ArrayList<Integer>();
         int i = 0;
