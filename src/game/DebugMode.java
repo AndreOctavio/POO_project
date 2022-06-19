@@ -34,11 +34,8 @@ public class DebugMode extends Game {
         String[] commandsArray = c.split(" "); // commandsArray has all the strings from cmd-file
         int i = 0, n, bet = 0, p_bet = 5, deal = -1, illegal = 0;
         double sum_of_all_bets = 0;
-        int count = 1;
         while (i < commandsArray.length) {
             if (commandsArray[i].equals("b")) { // command bet
-                System.out.println("\n-|-|-|-|-|-|-|-|-"+count+"-|-|-|-|-|-|-|-|-");
-                count++; //DELETE THIS SHIT
                 if (i + 1 != commandsArray.length) {
                     try {
                         bet = Integer.parseInt(commandsArray[i + 1]); // convert the string next to b into an int
@@ -50,10 +47,10 @@ public class DebugMode extends Game {
                     }
                 }
 
-                //System.out.print("\n-cmd b ");
+                System.out.print("\n-cmd b ");
 
                 if (deal != -1) { // check if bet command is llegal
-                    System.out.println("\nb: illegal command\n");
+                    System.out.println("\nb: illegal command");
                 } else if (bet < 0 || bet > 5) { // check if bet amout is between [1,5]
                     System.out.print(commandsArray[i + 1] + "\nb: illegal amount\n");
                 } else {
@@ -61,7 +58,7 @@ public class DebugMode extends Game {
                     p_bet = bet;
                     sum_of_all_bets += bet; // to keep track of the sum of bets
                     bet(bet);
-                    //System.out.println("\nplayer is betting " + bet);
+                    System.out.println("\nplayer is betting " + bet);
                 }
                 i += 2;
             } else if (commandsArray[i].equals("$")) { // command credit
@@ -71,7 +68,7 @@ public class DebugMode extends Game {
                 if (deal == 0) { // check if deal is llegal
                     deal = 1;
                     deal();
-                    //System.out.print("\n-cmd d\nplayer's hand ");
+                    System.out.print("\n-cmd d\nplayer's hand ");
                     for (Card tmp : player.hand) { // print player's hand
                         System.out.print(tmp.reverse(tmp) + " ");
                     }
@@ -82,6 +79,9 @@ public class DebugMode extends Game {
                 i++;
             } else if (commandsArray[i].equals("h")) { // command hold
                 int tmp;
+                
+                System.out.print("\n-cmd h ");
+
                 for (n = 1; n < 6; n++) { // get the cards the player wants to hold
                     if (i + n == commandsArray.length) {
                         break;
@@ -93,26 +93,22 @@ public class DebugMode extends Game {
                     }
                     if (tmp < 1 || tmp > 5) {
                         illegal = 1;
-                        System.out.println("h: illegal command");
-                        System.exit(0);
                     }
                     hold.add(tmp); // add integers to hold
                 }
 
                 i += hold.size() + 1;
 
-                //System.out.print("\n\n-cmd h ");
-
                 for (n = 0; n < hold.size(); n++) { // print the integers read next to h command
-                    //System.out.print(hold.get(n) + " ");
+                    System.out.print(hold.get(n) + " ");
                 }
 
                 if (deal == 1 && illegal != 1) { // check if command h is legal
                     doHold(hold);
-                    //System.out.print("\nplayer's hand ");
+                    System.out.print("\nplayer's hand ");
 
                     for (Card tmp2 : player.hand) { // print player's hand
-                        //System.out.print(tmp2.reverse(tmp2) + " ");
+                        System.out.print(tmp2.reverse(tmp2) + " ");
                     }
 
                     deal = -1;
@@ -124,7 +120,7 @@ public class DebugMode extends Game {
                 }
                 hold.clear();
             } else if (commandsArray[i].equals("a")) { // command advice
-                //System.out.print("\n-cmd a");
+                System.out.print("\n-cmd a");
                 if (deal == 1) { // check if command a is llegal
                     hold = MasterKey.advice(player.hand);
                     Collections.sort(hold);
@@ -133,6 +129,8 @@ public class DebugMode extends Game {
                     for (n = 0; n < hold.size(); n++) { // print which cards the player needs to hold
                         System.out.print(hold.get(n) + " ");
                     }
+
+                    System.out.print("\n");
                 } else {
                     System.out.print("\na: illegal command\n");
                 }
@@ -156,11 +154,15 @@ public class DebugMode extends Game {
      * because in this mode you dont need to shuffle.
      */
     public void deal() {
-        hands_count[10]++;
 
         for (int i = 0; i < 5; i++) {
-            player.hand.add(deckOfcards.deck.get(0));
-            deckOfcards.deck.remove(0);
+            try {
+                player.hand.add(deckOfcards.deck.get(0));
+                deckOfcards.deck.remove(0);
+            } catch (Exception e){
+                System.out.println("\nNo more cards in card file.");
+                System.exit(0);
+            }
         }
 
     }
@@ -177,10 +179,23 @@ public class DebugMode extends Game {
 
         for (int n = 1; n < 6; n++) {
             if (!deckOfcards.search(h, n)) { // check if n is in hold
-                player.hand.set(n - 1, deckOfcards.deck.get(0)); // replace the new card in players hand
-                deckOfcards.deck.remove(0);
+
+                try {
+                    player.hand.set(n - 1, deckOfcards.deck.get(0)); // replace the new card in players hand
+                    deckOfcards.deck.remove(0);
+                } catch (Exception e) {
+                    System.out.println("\nNo cards left in card file.");
+                    System.exit(0);
+                }
             }
         }
+    }
+
+    /**
+     * Prints the players credit.
+     */
+    public void credit() {
+        System.out.println("\n-cmd $\nplayer's credit is " + player.money);
     }
 
     /**
@@ -190,6 +205,7 @@ public class DebugMode extends Game {
      * @param name_hand integer which identifies the hand of cards the player owns
      */
     public void result(int name_hand) {
+        hands_count[10]++;
 
         switch (name_hand) {
             case 11: // player has a ROYAL FLUSH

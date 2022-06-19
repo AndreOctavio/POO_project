@@ -36,13 +36,6 @@ abstract class Game {
     }
 
     /**
-     * Prints the players credit.
-     */
-    public void credit() {
-        System.out.println("\n-cmd $\nplayer's credit is " + player.money);
-    }
-
-    /**
      * Gets 5 cards from deckOfcards and gives them to players hand.
      */
     public abstract void deal();
@@ -61,7 +54,7 @@ abstract class Game {
      */
     public void statistics(double N13) {
         System.out.println("Hand                Nb");
-        System.out.println("______________________");
+        System.out.println("________________________");
         System.out.println("Jacks or Better     " + hands_count[0]);
         System.out.println("Two Pair            " + hands_count[1]);
         System.out.println("Three of a kind     " + hands_count[2]);
@@ -72,8 +65,8 @@ abstract class Game {
         System.out.println("Straight Flush      " + hands_count[7]);
         System.out.println("Royal Flush         " + hands_count[8]);
         System.out.println("Other               " + hands_count[9]);
-        System.out.println("______________________");
-        System.out.println("Total " + hands_count[10]);
-        System.out.println("Credit " + player.money + " (" + N13 + "%)");
+        System.out.println("________________________");
+        System.out.println("Total              " + hands_count[10]);
+        System.out.println("Credit        " + player.money + " (" + N13 + "%)");
     }
 }

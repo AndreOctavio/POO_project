@@ -67,6 +67,11 @@ public class Main {
                 System.exit(0);
             }
 
+            if (bet < 0 || bet > 5) {
+                System.out.println("error: invalid bet amount " + bet);
+                System.exit(0);
+            }
+
             SimulationMode sm = new SimulationMode(credit, nbdeals, bet);
 
             for (int i = nbdeals; i > 0; i--) { //loop with all the plays we need to do
